@@ -30,14 +30,18 @@ public class Dashboard extends Activity{
     Fragment frag;
     FrameLayout tabs;
 
+    Protocol User;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+
         previous = getIntent();
         authority = previous.getStringExtra("Authority");
-
+        //----------------Here we get the user authority from the loginscreen
+        User = (Protocol) previous.getSerializableExtra("User");
+        //-----------
         frag = new EditPersonalDetails();
         FragmentTransaction ft = fm.beginTransaction();
 
@@ -45,7 +49,7 @@ public class Dashboard extends Activity{
         tabs.removeAllViews();
         ft.replace(R.id.D_tabview_framelayout, frag).commit();
 
-        if(authority.equals("Teacher"))
+        if(User.authority.equals("Teacher"))
         {
             Button temp = (Button) findViewById(R.id.D_SenAnn_button);
             temp.setVisibility(View.VISIBLE);
@@ -79,12 +83,14 @@ public class Dashboard extends Activity{
     public void toViewUniversityDetails(View v)
     {
             Intent i = new Intent(this, ViewUniversityDetails.class);
+            i.putExtra("User",User);
             startActivity(i);
     }
 
     public void toListOfSubjects(View v)
     {
             Intent i = new Intent(this, ListOfSubjects.class);
+            i.putExtra("User",User);
             startActivity(i);
     }
 

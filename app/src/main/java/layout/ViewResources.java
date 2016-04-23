@@ -89,7 +89,7 @@ public class ViewResources extends Fragment {
         listview.setAdapter(adapter);
         */
 
-        GetFromDatabase();
+//        GetFromDatabase();
 
         return rootView;
         // Inflate the layout for this fragment

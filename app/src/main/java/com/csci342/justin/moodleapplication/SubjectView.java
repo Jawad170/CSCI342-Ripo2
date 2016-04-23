@@ -23,19 +23,21 @@ public class SubjectView extends Activity {
     FragmentManager fm = getFragmentManager();
     Fragment frag;
     FrameLayout tabs;
-
+    Protocol User;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
         previous = getIntent();
+        User = (Protocol) previous.getSerializableExtra("User");
         connect = (Connection) previous.getSerializableExtra("Connection");
+
         String subject = previous.getStringExtra("Subject Name");
 
 
 
-        if(connect.user.authority.equals("Teacher"))
+        if(User.authority.equals("Teacher"))
         {
             setContentView(R.layout.activity_subject_view_teacher);
             TextView temp = (TextView) findViewById(R.id.SVT_subjectname_textview);
@@ -71,7 +73,7 @@ public class SubjectView extends Activity {
 
 
         Bundle args = new Bundle();
-        args.putString("subject", ( (TextView) findViewById(R.id.SVT_subjectname_textview)).getText().toString() );
+        args.putString("subject", ( (TextView) findViewById(R.id.SV_subjectname_textview)).getText().toString() );
         frag.setArguments(args);
 
         ft.replace(R.id.SV_tabview_framelayout, frag).commit();

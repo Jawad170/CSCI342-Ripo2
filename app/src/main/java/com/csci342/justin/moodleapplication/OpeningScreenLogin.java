@@ -29,7 +29,9 @@ public class OpeningScreenLogin extends AppCompatActivity{
     Handler myHandler;
     public static int login_token = 0;
 
-    Protocol user;
+
+
+    Protocol User;
 
     public static final int PORT = 33333;
     public static final String addr = "192.168.1.134";
@@ -40,6 +42,12 @@ public class OpeningScreenLogin extends AppCompatActivity{
 
         setContentView(R.layout.activity_opening_screen_login);
 
+        //----------------Here is the place where we initialize the user protocol and pass it to the rest.
+        User = new Protocol();
+        User.setAuthority("Teacher");
+        User.setPass("12345");
+        User.setLogin("abosami");
+        //----------------------------------HARDCODED FOR NOW
         spinner = (Spinner) findViewById(R.id.OSL_tempspin_spinner);
 
         String[] logins = new String[] {"Student", "Teacher"};
@@ -50,7 +58,7 @@ public class OpeningScreenLogin extends AppCompatActivity{
 
         spinner.setAdapter(spinner_adapter);
 
-        user = new Protocol();
+
 
         myHandler = new Handler()
         {
@@ -92,9 +100,9 @@ public class OpeningScreenLogin extends AppCompatActivity{
     {
         Protocol the_user;
 
-        public logMeIn(Protocol user)
+        public logMeIn(Protocol User)
         {
-            the_user = user;
+            the_user = User;
         }
 
         @Override
@@ -149,17 +157,17 @@ public class OpeningScreenLogin extends AppCompatActivity{
             EditText password_test = (EditText) findViewById(R.id.OSL_password_edittext);
             String ema = email_test.getText().toString();
             String passw = password_test.getText().toString();
-            user.generateHash(passw);
-            user.setLogin(ema);
-            logMeIn temp = new logMeIn(user);
+            User.generateHash(passw);
+            User.setLogin(ema);
+            logMeIn temp = new logMeIn(User);
             temp.start();
     }
 
     public void login(View v) {
         Toast.makeText(this, "Attempting to connect", Toast.LENGTH_LONG).show();
 
-        startLoginProcess();
-
+       // startLoginProcess();
+        openDashboard();
 
     }
 
@@ -167,7 +175,8 @@ public class OpeningScreenLogin extends AppCompatActivity{
     {
         Intent i = new Intent(this, Dashboard.class);
         String x = ((Spinner)findViewById(R.id.OSL_tempspin_spinner)).getSelectedItem().toString();
-        i.putExtra("Authority",x);
+        User.setAuthority(x);
+        i.putExtra("User",User);
         startActivity(i);
     }
 

@@ -13,13 +13,16 @@ public class ListOfSubjects extends Activity {
 
     Intent previous;
     Connection connect;
-
+    Protocol User;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_subjects);
+       //------------------------------
 
+        //-------------------
         previous = getIntent();
+        User = (Protocol) previous.getSerializableExtra("User");
         connect = (Connection) previous.getSerializableExtra("Connection");
 
         Spinner spinner = (Spinner) findViewById(R.id.LOS_yearselection_spinner);
@@ -73,7 +76,7 @@ public class ListOfSubjects extends Activity {
 
         Intent i = new Intent(ListOfSubjects.this, SubjectView.class);
         i.putExtra("Subject Name", x);
-        i.putExtra("Connection",connect);
+        i.putExtra("User",User);
         startActivity(i);
     }
 
@@ -86,7 +89,7 @@ public class ListOfSubjects extends Activity {
 
                 Intent i = new Intent(ListOfSubjects.this, SubjectView.class);
                 i.putExtra("Subject Name", x);
-                i.putExtra("Connection",connect);
+                i.putExtra("User",User);
                 startActivity(i);
 
             }

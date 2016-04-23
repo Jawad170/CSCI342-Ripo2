@@ -24,14 +24,21 @@ public class ViewUniversityDetails extends Activity {
     Fragment frag;
     FrameLayout tabs;
 
+    Protocol User;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_university_details);
 
         previous = getIntent();
-        connect = (Connection) previous.getSerializableExtra("Connection");
+        User = new Protocol();
+        User = (Protocol) previous.getSerializableExtra("User");
 
+        connect = (Connection) previous.getSerializableExtra("Connection");
+        //-------------
+
+
+        //------------
         frag = new ViewCalendar();
         FragmentTransaction ft = fm.beginTransaction();
 
@@ -41,7 +48,7 @@ public class ViewUniversityDetails extends Activity {
 
         Button temp = (Button) findViewById(R.id.VUD_AddEve_button);
 
-        if(connect.user.authority.equals("Teacher"))
+        if(User.authority.equals("Teacher"))
         {
             temp.setVisibility(View.VISIBLE);
         }
@@ -58,7 +65,7 @@ public class ViewUniversityDetails extends Activity {
         FragmentTransaction ft = fm.beginTransaction();
         tabs.removeAllViews();
         ft.replace(R.id.VUD_tabsview_framelayout, frag).commit();
-        if(connect.user.authority.equals("Teacher")) {
+        if(User.authority.equals("Teacher")) {
             Button temp = (Button) findViewById(R.id.VUD_AddEve_button);
             temp.setVisibility(View.VISIBLE);
         }
