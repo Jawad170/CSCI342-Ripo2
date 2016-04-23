@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#a0d0f3">
+
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/OSL_title_textview"
+        android:textSize="35dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_marginTop="53dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:background="#a0d0f3"
+        android:id="@+id/OSL_entryfields_linearlayout"
+        android:layout_marginTop="66dp"
+        android:layout_below="@+id/OSL_title_textview"
+        android:layout_alignRight="@+id/OSL_title_textview"
+        android:layout_alignEnd="@+id/OSL_title_textview">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:id="@+id/OSL_email_edittext"
+            android:layout_gravity="center_horizontal" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/OSL_password_edittext"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="Login"
+        android:id="@+id/OSL_login_button"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="35dp"
+        android:onClick="login"
+        android:background="#71a8d0"
+        />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#a0d0f3"
+        android:layout_alignTop="@+id/OSL_entryfields_linearlayout"
+        android:layout_alignLeft="@+id/OSL_title_textview"
+        android:layout_alignStart="@+id/OSL_title_textview"
+        android:layout_toLeftOf="@+id/OSL_entryfields_linearlayout"
+        android:layout_toStartOf="@+id/OSL_entryfields_linearlayout"
+        android:id="@+id/OSL_labelfields_linearlayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Email"
+            android:id="@+id/OSL_email_textview"
+            android:gravity="center_vertical|center_horizontal"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Password"
+            android:id="@+id/OSL_password_textview"
+            android:gravity="center_vertical|center_horizontal"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <Spinner
+        android:layout_width="200dp"
+        android:layout_height="65dp"
+        android:id="@+id/OSL_tempspin_spinner"
+        android:layout_below="@+id/OSL_entryfields_linearlayout"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:src="@drawable/uowdmoodletitle01"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>

@@ -1,0 +1,38 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="layout.SendAnnouncement"
+    android:background="#69a6d2">
+
+
+    <Button
+        android:layout_width="386dp"
+        android:layout_height="wrap_content"
+        android:text="New Announcement"
+        android:id="@+id/SA_SenAnn_button"
+        android:layout_gravity="center_horizontal|bottom"
+        android:onClick="AddNewItem"
+        android:background="#5993bd"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/SA_scollview"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp"
+        android:layout_above="@+id/SA_SenAnn_button">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/SA_linear_layout"></LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
