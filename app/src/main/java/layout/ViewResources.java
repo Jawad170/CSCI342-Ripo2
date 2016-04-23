@@ -1,5 +1,6 @@
 package layout;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.ListView;
 
 import com.csci342.justin.moodleapplication.DBHandler_Resources;
 import com.csci342.justin.moodleapplication.R;
+import com.csci342.justin.moodleapplication.SubjectView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +37,19 @@ public class ViewResources extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    onDataBaseAccessListener DBAL;
+
     View rootView;
 
     private OnFragmentInteractionListener mListener;
 
     public ViewResources() {
         // Required empty public constructor
+    }
+
+    public interface onDataBaseAccessListener
+    {
+        public void GetFromDatabase(ListView LV);
     }
 
     /**
@@ -64,7 +73,8 @@ public class ViewResources extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        if (getArguments() != null)
+        {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
@@ -91,6 +101,9 @@ public class ViewResources extends Fragment {
 
 //        GetFromDatabase();
 
+
+
+        DBAL.GetFromDatabase((ListView) rootView.findViewById(R.id.VR_infolist_listview));
         return rootView;
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_view_resources, container, false);
@@ -135,4 +148,11 @@ public class ViewResources extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+
+        DBAL = (onDataBaseAccessListener) activity;
+    }
 }

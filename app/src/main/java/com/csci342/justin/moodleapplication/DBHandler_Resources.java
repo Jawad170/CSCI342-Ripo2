@@ -61,8 +61,8 @@ public class DBHandler_Resources  extends SQLiteOpenHelper
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(KEY_NAME, resourceName); // Shop Name
-        values.put(KEY_SUBJECT, subject); // Shop Phone Number
+        values.put(KEY_NAME, resourceName);
+        values.put(KEY_SUBJECT, subject);
 
         // Inserting Row
         db.insert(TABLE_RES, null, values);
@@ -75,7 +75,7 @@ public class DBHandler_Resources  extends SQLiteOpenHelper
         List<String> resList = new ArrayList<String>();
 
         // Select All Query
-        String selectQuery = "SELECT * FROM " + TABLE_RES + " WHERE " + KEY_SUBJECT + " = " + subject;
+        String selectQuery = "SELECT * FROM " + TABLE_RES + " WHERE " + KEY_SUBJECT + " = \"" + subject +"\"";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -84,7 +84,7 @@ public class DBHandler_Resources  extends SQLiteOpenHelper
         {
             do
             {
-                String res = cursor.getString(0);
+                String res = cursor.getString(1);
 
                 resList.add(res);
 
