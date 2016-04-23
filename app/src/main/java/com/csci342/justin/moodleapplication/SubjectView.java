@@ -7,8 +7,13 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.List;
 
 import layout.UploadAssignment;
 import layout.ViewEnrolledStudents;
@@ -19,6 +24,7 @@ public class SubjectView extends Activity {
 
     Intent previous;
     Connection connect;
+    Bundle args;
 
     FragmentManager fm = getFragmentManager();
     Fragment frag;
@@ -72,11 +78,25 @@ public class SubjectView extends Activity {
         tabs.removeAllViews();
 
 
-        Bundle args = new Bundle();
+        args = new Bundle();
         args.putString("subject", ( (TextView) findViewById(R.id.SV_subjectname_textview)).getText().toString() );
         frag.setArguments(args);
 
         ft.replace(R.id.SV_tabview_framelayout, frag).commit();
+    }
+
+    public void UploadNewResource(View v)
+    {
+        DBHandler_Resources db = new DBHandler_Resources(this);
+
+        String name = ((EditText)findViewById(R.id.UR_ResourceName_edittext)).getText().toString();
+
+        //args = getArguments();
+        //String subject = args.getString("subject");
+        String subject = "CSCI015";
+        //String subject = ((TextView) findViewById(R.id.SV_subjectname_textview)).getText().toString();
+
+        db.addResource(name, subject);
     }
 
     public void switchToViewResourcesTeacher(View v)
@@ -90,6 +110,24 @@ public class SubjectView extends Activity {
         frag.setArguments(args);
 
         ft.replace(R.id.SVT_tabsview_framelayout, frag).commit();
+        GetFromDatabase();
+    }
+
+
+    public void GetFromDatabase()
+    {
+        DBHandler_Resources db = new DBHandler_Resources(this);
+
+        String subject = "CSCI015";
+        //String subject = args.getString("subject");
+
+        ListView lv = (ListView) findViewById(R.id.VR_infolist_listview);
+        List<String> myList = db.getAllResources(subject);
+
+        ArrayAdapter<String> myarrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, myList);
+        lv.setAdapter(myarrayAdapter);
+        lv.setTextFilterEnabled(true);
+
     }
 
     public void switchToViewGrades(View v)

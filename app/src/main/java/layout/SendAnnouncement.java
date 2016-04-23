@@ -1,12 +1,14 @@
 package layout;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -64,7 +66,6 @@ public class SendAnnouncement extends Fragment {
         super.onCreate(savedInstanceState);
 
 
-
     }
 
 
@@ -104,9 +105,8 @@ public class SendAnnouncement extends Fragment {
         RelativeLayout.LayoutParams x = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300);
         x.addRule(RelativeLayout.BELOW, R.id.D_tabslist_linearlayoutvertical);
         x.addRule(RelativeLayout.ABOVE, R.id.D_VieUni_button);
-
-
         f2.setLayoutParams(x);
+        FragmentManager fm = getFragmentManager();
 
 
         return rootView;
@@ -137,7 +137,7 @@ public class SendAnnouncement extends Fragment {
         mListener = null;
     }
 
-    public void NewAnnoucementButton()
+    public void NewAnnoucementButton(View v)
     {
 
     }
@@ -157,3 +157,4 @@ public class SendAnnouncement extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 }
+

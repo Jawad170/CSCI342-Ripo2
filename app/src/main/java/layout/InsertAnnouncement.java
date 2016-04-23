@@ -7,25 +7,19 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-import com.csci342.justin.moodleapplication.DBHandler_Resources;
 import com.csci342.justin.moodleapplication.R;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ViewResources.OnFragmentInteractionListener} interface
+ * {@link InsertAnnouncement.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ViewResources#newInstance} factory method to
+ * Use the {@link InsertAnnouncement#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ViewResources extends Fragment {
+public class InsertAnnouncement extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -35,11 +29,9 @@ public class ViewResources extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    View rootView;
-
     private OnFragmentInteractionListener mListener;
 
-    public ViewResources() {
+    public InsertAnnouncement() {
         // Required empty public constructor
     }
 
@@ -49,11 +41,11 @@ public class ViewResources extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ViewResources.
+     * @return A new instance of fragment InsertAnnouncement.
      */
     // TODO: Rename and change types and number of parameters
-    public static ViewResources newInstance(String param1, String param2) {
-        ViewResources fragment = new ViewResources();
+    public static InsertAnnouncement newInstance(String param1, String param2) {
+        InsertAnnouncement fragment = new InsertAnnouncement();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -73,27 +65,8 @@ public class ViewResources extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        rootView = inflater.inflate(R.layout.fragment_view_resources, container, false);
-        /*
-        final ListView listview = (ListView) rootView.findViewById(R.id.VR_infolist_listview);
-
-        String[] values = new String[] {"SUBJECT OUTLINE", " - ", " - ", " - ", " - ", " - ", " - ", " - ", " - ", " - ", " - ", " - ", " - "};
-
-        final ArrayList<String> list = new ArrayList<String>();
-        for (int i = 0; i < values.length; ++i) {
-            list.add(values[i]);
-        }
-
-        final ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, list);
-        listview.setAdapter(adapter);
-        */
-
-//        GetFromDatabase();
-
-        return rootView;
         // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_view_resources, container, false);
+        return inflater.inflate(R.layout.fragment_insert_announcement, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -134,5 +107,4 @@ public class ViewResources extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
 }

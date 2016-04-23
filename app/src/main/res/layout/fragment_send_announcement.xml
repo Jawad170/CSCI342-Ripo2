@@ -12,7 +12,7 @@
         android:text="New Announcement"
         android:id="@+id/SA_SenAnn_button"
         android:layout_gravity="center_horizontal|bottom"
-        android:onClick="AddNewItem"
+        android:onClick="toInsertAnnouncement"
         android:background="#5993bd"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"

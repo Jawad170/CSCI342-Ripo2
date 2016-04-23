@@ -132,15 +132,5 @@ public class UploadResources extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void UploadNewResource(View v)
-    {
-        DBHandler_Resources db = new DBHandler_Resources(getActivity());
 
-        String name = ((TextView)v.findViewById(R.id.textView)).getText().toString();
-
-        Bundle args = getArguments();
-        String subject = args.getString("subject");
-
-        db.addResource(name, subject);
-    }
 }

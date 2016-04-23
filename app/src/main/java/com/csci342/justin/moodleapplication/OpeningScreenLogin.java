@@ -71,6 +71,7 @@ public class OpeningScreenLogin extends AppCompatActivity{
                 {
                     Log.i("GOOD", "SETTING LOGIN TOKEN");
                     login_token = msg.arg1;
+
                     successFunction();
                 }
                 else
@@ -177,6 +178,7 @@ public class OpeningScreenLogin extends AppCompatActivity{
         String x = ((Spinner)findViewById(R.id.OSL_tempspin_spinner)).getSelectedItem().toString();
         User.setAuthority(x);
         i.putExtra("User",User);
+        i.putExtra("Token",login_token);
         startActivity(i);
     }
 
