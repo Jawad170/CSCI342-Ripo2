@@ -25,6 +25,9 @@ public class Server extends Thread{
     static int[] token_list;
     static int index_iterator = 3;
 
+    static int announcement_array_size = 2;
+    static String[] announcements = new String[2];
+
     public static int generateToken()
     {
         Random randInt = new Random();
@@ -94,6 +97,8 @@ public class Server extends Thread{
     public static void main(String[] args) {
 
         token_list = new int[50];
+        announcements[0] = "Hello Ahmed";
+        announcements[1] = "These are my announcements";
 
         while (true) {
             try {
@@ -156,7 +161,7 @@ public class Server extends Thread{
                             }
                             else if(hello.tag == 1)
                             {
-                                //logic for handling request 1 (ANNOUNCMENT)
+                                //logic for handling request 1 (RECEIVE ANNOUNCMENT)
                                 System.out.println("Upload Announcement request caught");
                                 output.writeObject(hello);
                                 String announcement = (String)input.readObject();
@@ -167,11 +172,14 @@ public class Server extends Thread{
                             }
                             else if(hello.tag == 2)
                             {
-                                //logic for handling request 2
+                                //logic for handling request 2 (SEND ANNOUNCEMENTS)
+                                System.out.println("Update Announcements request caught");
+                                output.writeObject(announcement_array_size);
+                                output.writeObject(announcements);
                             }
                             else if(hello.tag == 3)
                             {
-                                //logic for handling request 3
+                                //logic for handling request 3 ()
                             }
                             else if(hello.tag == 4)
                             {
