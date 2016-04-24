@@ -20,7 +20,8 @@ import layout.ViewEnrolledStudents;
 import layout.ViewGrades;
 import layout.ViewResources;
 
-public class SubjectView extends Activity {
+public class SubjectView extends Activity implements ViewResources.onDataBaseAccessListener
+{
 
     Intent previous;
     Connection connect;
@@ -106,22 +107,23 @@ public class SubjectView extends Activity {
         tabs.removeAllViews();
 
         Bundle args = new Bundle();
-        args.putString("subject", ( (TextView) findViewById(R.id.SVT_subjectname_textview)).getText().toString() );
+        args.putString("subject", ((TextView) findViewById(R.id.SVT_subjectname_textview)).getText().toString());
         frag.setArguments(args);
 
         ft.replace(R.id.SVT_tabsview_framelayout, frag).commit();
-        GetFromDatabase();
+        //GetFromDatabase();
     }
 
-
-    public void GetFromDatabase()
+    @Override
+    public void GetFromDatabase(ListView LV)
     {
         DBHandler_Resources db = new DBHandler_Resources(this);
 
         String subject = "CSCI015";
         //String subject = args.getString("subject");
 
-        ListView lv = (ListView) findViewById(R.id.VR_infolist_listview);
+        //ListView lv = (ListView) findViewById(R.id.VR_infolist_listview);
+        ListView lv = LV;
         List<String> myList = db.getAllResources(subject);
 
         ArrayAdapter<String> myarrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, myList);
