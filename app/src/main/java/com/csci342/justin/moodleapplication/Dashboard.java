@@ -13,10 +13,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +30,8 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 import layout.EditPersonalDetails;
 import layout.InsertAnnouncement;
@@ -93,27 +99,55 @@ public class Dashboard extends Activity {
                 else if(msg.what == 2)//logout
                 {
                     login_token = 0;
-                    ConfirmedLogout();
+                    Toaster("Logged out.");
                     finish();
+                }
+                else if(msg.what==3)
+                {
+                    int size=msg.arg1;
+                    Toaster("Loading Announcements..");
+                    String[] Getann = (String[]) msg.obj;
+
+                    ArrayList<String> Announcements  = new ArrayList<String>();
+
+                    for(int i =0; i < size ; i++)//populate array.
+                    {
+
+                        Announcements.add(Getann[i]);
+                    }
+                Populate(Announcements);
                 }
                 else {
                     Log.i("Bad", "From DashBoard");
-                    Failure_Connection_Dashboard();
+                    Toaster("Failed to Connect to server");
                 }
 
             }
         };
 
     }
+    public void Populate(ArrayList<String> Announcements)
+    {
+        ListView lv = (ListView) findViewById(R.id.SA_SendAnn_listview);
+        ArrayAdapter<String> AdapterAnn = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,Announcements);
+        lv.setAdapter(AdapterAnn);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            public void onItemClick(AdapterView<?> arg0,View v , int position, long arg3)
+            {
 
+            }
+        }
+        );
+    }
     //----------------------------------------END OF ONCREATE
 
-    //-----------------------------------------Start of Confirmed Logout
-    public void ConfirmedLogout()
+    //-------------------------------------Start of Toaster
+    public void Toaster(String input)
     {
-        Toast.makeText(this,"Logged out.",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,input,Toast.LENGTH_SHORT).show();
     }
-    //-----------------------------------------End of Confirmed Logout
+    //--------------------------------------End of Toaster
 
     //--------------------------Start of SENT Feedback Function From server
     public void SentFeedback() {
@@ -122,31 +156,68 @@ public class Dashboard extends Activity {
         FragmentTransaction ft = fm.beginTransaction();
         tabs.removeAllViews();
         ft.replace(R.id.D_tabview_framelayout, frag).commit();
-        Toast.makeText(this, "Announcement Sent Successfully !", Toast.LENGTH_SHORT).show();
+        Toaster("Announcement Sent Successfully !");
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(InsertAnn.getWindowToken(), 0);
     }
     //----------------------------End of SENT Feedback Function From server
 
-    //----------------------Start of Successful Connection From Dashboard Function
-    public void Successful_Connection_Dashboard()
+    //-----------------------------Start of GetAnnouncement Thread
+    private class Get_Announcement_server extends Thread
     {
-        Toast.makeText(this,"Successfully Connected To server",Toast.LENGTH_SHORT).show();
-    }
-    //-----------------------END of Successful Connection From Dashboard Function
+        String[] Announcements;
+        int token;
+        int size;
 
-    //-----------------------Start of Failure Connection from Server to Dashboard Function
-    public void Failure_Connection_Dashboard()
-    {
-        Toast.makeText(this,"Failed to Connect to server",Toast.LENGTH_SHORT).show();
+        public Get_Announcement_server(int intoken)
+        {
+            token = intoken;
+            size=0;
+        }
+        @Override
+        public void run()
+        {
+            try
+            {
+                Socket with_server = new Socket(InetAddress.getByName(addr),PORT);
+                ObjectInputStream input = new ObjectInputStream(with_server.getInputStream());
+                ObjectOutputStream output = new ObjectOutputStream(with_server.getOutputStream());
+
+                Info request_size = new Info();
+                request_size.setTag(2);
+                request_size.setToken(token);
+                output.writeObject(request_size);
+                /*
+                Info confirm_server = new Info();
+                confirm_server = (Info) input.readObject();
+              */
+                    size = (int) input.readObject();
+                    Announcements = new String[size];
+                    Announcements = (String[]) input.readObject();
+
+                Message msg = myHandler.obtainMessage();
+                msg.what = 3;
+                msg.arg1 = size;
+                msg.obj = (Object) Announcements;
+                myHandler.sendMessage(msg);
+
+
+            }
+            catch(UnknownHostException e)
+            {
+                e.printStackTrace();
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+        }
+
     }
-    //----------------------End of Failure Connection from server to Dashboard Function
-    //------------------------Start of logout failed
-    public void Logout_Failed()
-    {
-        Toast.makeText(this,"Logout failed",Toast.LENGTH_SHORT).show();
-    }
-    //------------------------ End of lgout failed
+    //----------------------------End of GetAnnouncement Thread
     //-----------------Start Logout Thread
     private class Request_Logout_server extends Thread
     {
@@ -177,7 +248,7 @@ public class Dashboard extends Activity {
                     msg.what = 2;
                     myHandler.sendMessage(msg);
                 } else {
-                    Logout_Failed();
+                   Toaster("Logout failed");
                 }
             }
             catch(UnknownHostException e)
@@ -201,7 +272,7 @@ public class Dashboard extends Activity {
 
         String Announcement;
         int token_from_login;
-        int ack;
+        int ack=0;
         public send_announcement_server(String In_Announcement, int token)
         {
             Announcement = In_Announcement;
@@ -218,24 +289,33 @@ public class Dashboard extends Activity {
                 ObjectOutputStream output = new ObjectOutputStream(with_server.getOutputStream());
                 Log.i("Creating the Temp Info"," Proceeding to Set tag and Token");
 
-                Info temp = new Info();
-                temp.setTag(5);
-                temp.setToken(token_from_login);
-                output.writeObject(temp);
+                Info send_to_server = new Info();
+                send_to_server.setTag(1);
+                send_to_server.setToken(token_from_login);
+                output.writeObject(send_to_server);
                 Log.i("Sent the Tag and Token"," Proceeding to read reply from server");
 
-                temp = (Info)input.readObject();
+                Info get_from_server = new Info();
+                get_from_server = (Info)input.readObject();
                 Log.i("Finished Reading Input","");
 
-                if(temp.tag == 1)
+                if(get_from_server.tag == 1)
                 {
                     Message msg = myHandler.obtainMessage();
                     msg.what=1;
                     output.writeObject(Announcement);
                     ack = (int)input.readObject();
-                    myHandler.sendMessage(msg);
-                    Log.i("Success ","Confirmed Connection to server");
-                }
+                    if(ack != 0)
+                        {
+                        myHandler.sendMessage(msg);
+                        Log.i("Success ", "Confirmed Connection to server");
+                         }
+                    else
+                    {
+                        Log.i("Failed", "Failed to recieve confirmation from server");
+                    }
+
+                    }
                 else
                 {
                     Message msg = myHandler.obtainMessage();
@@ -272,6 +352,9 @@ public class Dashboard extends Activity {
         FragmentTransaction ft = fm.beginTransaction();
         tabs.removeAllViews();
         ft.replace(R.id.D_tabview_framelayout, frag).commit();
+
+        Get_Announcement_server getann = new Get_Announcement_server(login_token);
+        getann.start();
     }
 
     public void toViewUniversityDetails(View v) {
@@ -305,6 +388,8 @@ public class Dashboard extends Activity {
         EditText InsertAnn = (EditText) findViewById(R.id.IA_insAnn_edittext) ;
         String Announcement_Inserted;
         Announcement_Inserted = InsertAnn.getText().toString();
+        send_announcement_server confirmsend = new send_announcement_server(Announcement_Inserted, login_token);
+        confirmsend.start();
         Log.i("String is : ", Announcement_Inserted);
 
     }

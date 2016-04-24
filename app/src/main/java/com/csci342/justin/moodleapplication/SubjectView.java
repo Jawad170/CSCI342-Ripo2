@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -18,10 +19,11 @@ import java.util.List;
 
 import layout.UploadAssignment;
 import layout.ViewEnrolledStudents;
+import layout.ViewEnrolledStudentsDetails;
 import layout.ViewGrades;
 import layout.ViewResources;
 
-public class SubjectView extends Activity implements ViewResources.onDataBaseAccessListener
+public class SubjectView extends Activity implements ViewResources.onDataBaseAccessListener, ViewEnrolledStudents.StudentListHandler
 {
 
     Intent previous;
@@ -111,7 +113,7 @@ public class SubjectView extends Activity implements ViewResources.onDataBaseAcc
 
         String name = ((TextView)findViewById(R.id.VESD_textView_studentName)).getText().toString();
         String gradable = ((EditText)findViewById(R.id.VESD_editText_Gradable)).getText().toString();
-        int grade = Integer.parseInt(((EditText) findViewById(R.id.VESD_editText_Gradable)).getText().toString());
+        int grade = Integer.parseInt(((EditText) findViewById(R.id.VESD_editText_Grade)).getText().toString());
         String subject = ((TextView) findViewById(R.id.SVT_subjectname_textview)).getText().toString();
 
         db.addGrade(name, subject, gradable, grade);
@@ -189,6 +191,26 @@ public class SubjectView extends Activity implements ViewResources.onDataBaseAcc
         FragmentTransaction ft = fm.beginTransaction();
         tabs.removeAllViews();
         ft.replace(R.id.SV_tabview_framelayout, frag).commit();
+    }
+
+    @Override
+    public void putUpStudentDetails(String name)
+    {
+        Log.d("SubjectView", "Entered putUpStudentDetails");
+        frag = new ViewEnrolledStudentsDetails();
+
+        Log.d("SubjectView", "Created Fragment");
+        FragmentTransaction ft = fm.beginTransaction();
+
+        Log.d("SubjectView", "Created Transaction");
+
+        Bundle args = new Bundle();
+        args.putString("name", name);
+        frag.setArguments(args);
+        Log.d("SubjectView", "Bundle is Fine");
+
+        //tabs.removeAllViews();
+        ft.replace(R.id.SVT_tabsview_framelayout, frag).commit();
     }
 
     public void switchToUploadAssignment(View v)

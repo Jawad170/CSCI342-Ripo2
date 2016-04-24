@@ -115,7 +115,7 @@ public class OpeningScreenLogin extends AppCompatActivity{
                 ObjectOutputStream output = new ObjectOutputStream(with_server.getOutputStream());
                 Info Mylogin = new Info();
                 Mylogin.setTag(0);
-                Mylogin.setToken(0);
+                Mylogin.setToken(login_token);
                 output.writeObject(Mylogin);
                 output.writeObject(the_user);
                 Log.i("WAITING", "Waiting for Server Reply");

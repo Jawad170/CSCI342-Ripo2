@@ -1,9 +1,11 @@
 package layout;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.csci342.justin.moodleapplication.R;
+import com.csci342.justin.moodleapplication.SubjectView;
 
 import java.util.ArrayList;
 
@@ -37,6 +40,8 @@ public class ViewEnrolledStudents extends Fragment {
     ArrayList<String> studentListin;
 
     private OnFragmentInteractionListener mListener;
+
+    StudentListHandler SLH;
 
     public ViewEnrolledStudents() {
         // Required empty public constructor
@@ -69,6 +74,11 @@ public class ViewEnrolledStudents extends Fragment {
         }
     }
 
+    public interface StudentListHandler
+    {
+        public void putUpStudentDetails(String name);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -91,6 +101,8 @@ public class ViewEnrolledStudents extends Fragment {
             public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
 
                 String value = (String) arg0.getItemAtPosition(position);
+                Log.d("ViewEnrolledStudents[F]", "Clicked! Name is " + value);
+                SLH.putUpStudentDetails(value);
 
             }
         });
@@ -135,5 +147,13 @@ public class ViewEnrolledStudents extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+
+        SLH = (StudentListHandler) activity;
     }
 }
