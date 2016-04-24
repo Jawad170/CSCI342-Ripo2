@@ -80,9 +80,9 @@ public class SubjectView extends Activity
             frag = new ViewResources();
             FragmentTransaction ft = fm.beginTransaction();
 
-            tabs = (LinearLayout) findViewById(R.id.SV_linearlayout);
+            tabs = (LinearLayout) findViewById(R.id.SVT_tabsbar_linearlayout);
             tabs.removeAllViews();
-            ft.replace(R.id.SVT_tabsview_framelayout, frag).commit();
+            ft.replace(R.id.SVT_tabsbar_linearlayout, frag).commit();
         }
         else
         {
