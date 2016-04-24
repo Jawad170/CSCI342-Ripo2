@@ -90,7 +90,14 @@ public class Dashboard extends Activity {
                     Log.i("GOOD", "From DashBoard");
                  //   Successful_Connection_Dashboard();
                     SentFeedback();
-                } else {
+                }
+                else if(msg.what == 2)//logout
+                {
+                    login_token = 0;
+                    ConfirmedLogout();
+                    finish();
+                }
+                else {
                     Log.i("Bad", "From DashBoard");
                     Failure_Connection_Dashboard();
                 }
@@ -102,6 +109,12 @@ public class Dashboard extends Activity {
 
     //----------------------------------------END OF ONCREATE
 
+    //-----------------------------------------Start of Confirmed Logout
+    public void ConfirmedLogout()
+    {
+        Toast.makeText(this,"Logged out.",Toast.LENGTH_SHORT).show();
+    }
+    //-----------------------------------------End of Confirmed Logout
 
     //--------------------------Start of SENT Feedback Function From server
     public void SentFeedback() {
@@ -129,7 +142,59 @@ public class Dashboard extends Activity {
         Toast.makeText(this,"Failed to Connect to server",Toast.LENGTH_SHORT).show();
     }
     //----------------------End of Failure Connection from server to Dashboard Function
+    //------------------------Start of logout failed
+    public void Logout_Failed()
+    {
+        Toast.makeText(this,"Logout failed",Toast.LENGTH_SHORT).show();
+    }
+    //------------------------ End of lgout failed
+    //-----------------Start Logout Thread
+    private class Request_Logout_server extends Thread
+    {
+        int token;
 
+        public Request_Logout_server(int in_token)
+        {
+            token=in_token;
+        }
+        @Override//after recieving confirmaiton info has 0 0
+        public void run()
+        {
+            try {
+                Socket with_server = new Socket(InetAddress.getByName(addr), PORT);
+                ObjectInputStream input = new ObjectInputStream(with_server.getInputStream());
+                ObjectOutputStream output = new ObjectOutputStream(with_server.getOutputStream());
+                Log.i("Creating info logout", " Proceeding to Set and Token");
+                Info send_to_server = new Info();
+                send_to_server.tag = 0;
+                send_to_server.token = token;
+                output.writeObject(send_to_server);
+                Log.i("Sent to server", " Token 0 Proceeding to Recieve");
+
+                Info get_from_server = new Info();
+                get_from_server = (Info) input.readObject();
+                if (get_from_server.token == 0) {
+                    Message msg = myHandler.obtainMessage();
+                    msg.what = 2;
+                    myHandler.sendMessage(msg);
+                } else {
+                    Logout_Failed();
+                }
+            }
+            catch(UnknownHostException e)
+            {
+                e.printStackTrace();
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+    //-----------------End Logout Thread
     //--------------------Start of Send Announcement THREAD
     private class send_announcement_server extends Thread
     {
@@ -242,6 +307,10 @@ public class Dashboard extends Activity {
         Log.i("String is : ", Announcement_Inserted);
 
     }
-
+    public void LogOut(View v)
+    {
+        Request_Logout_server startlogout = new Request_Logout_server(login_token);
+        startlogout.start();
+    }
 
     }
