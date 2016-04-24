@@ -23,7 +23,9 @@
         <activity android:name=".Dashboard" />
         <activity android:name=".ViewUniversityDetails" />
         <activity android:name=".ListOfSubjects" />
-        <activity android:name=".SubjectView"></activity>
+        <activity android:name=".SubjectView"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+
     </application>
 
 </manifest>

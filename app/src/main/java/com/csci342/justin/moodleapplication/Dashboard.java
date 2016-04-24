@@ -45,7 +45,8 @@ public class Dashboard extends Activity {
     Handler myHandler;
     public  int login_token = 0;
     public static final int PORT = 33333;
-    public static final String addr = "192.168.1.134";
+    public static final String addr = "172.18.16.78";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class Dashboard extends Activity {
 
         previous = getIntent();
         login_token = previous.getIntExtra("Token",login_token);
-      //TEST  Log.i("THE TOKEN IS ! : ", " "+login_token);
+        Log.i("THE TOKEN IS Dash! : ", " "+login_token);
         authority = previous.getStringExtra("Authority");
         //----------------Here we get the user authority from the loginscreen
         User = (Protocol) previous.getSerializableExtra("User");
@@ -77,6 +78,7 @@ public class Dashboard extends Activity {
             LinearLayout.LayoutParams x = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 0.0f);
             temp.setLayoutParams(x);
         }
+
 
         //---------------------Start of Handler
         myHandler = new Handler() {
