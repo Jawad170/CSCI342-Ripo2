@@ -34,7 +34,7 @@ public class OpeningScreenLogin extends AppCompatActivity{
     Protocol User;
 
     public static final int PORT = 33333;
-    public static final String addr = "192.168.1.134";
+    public static final String addr = "172.18.16.78";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +70,7 @@ public class OpeningScreenLogin extends AppCompatActivity{
                 if(msg.what == 1)
                 {
                     Log.i("GOOD", "SETTING LOGIN TOKEN");
-                    login_token = msg.arg1;
-
+                    login_token = msg.arg2;
                     successFunction();
                 }
                 else
@@ -114,8 +113,10 @@ public class OpeningScreenLogin extends AppCompatActivity{
                 Socket with_server = new Socket(InetAddress.getByName(addr), PORT);
                 ObjectInputStream input = new ObjectInputStream(with_server.getInputStream());
                 ObjectOutputStream output = new ObjectOutputStream(with_server.getOutputStream());
-
-                output.writeObject(the_user);
+                Info Mylogin = new Info();
+                Mylogin.setTag(0);
+                Mylogin.setToken(0);
+                output.writeObject(Mylogin);
 
                 Log.i("WAITING", "Waiting for Server Reply");
 
@@ -127,6 +128,7 @@ public class OpeningScreenLogin extends AppCompatActivity{
                     Message msg = myHandler.obtainMessage();
                     msg.what = 1;
                     msg.arg1 = 1;
+                    msg.arg2 = temp.token;
                     myHandler.sendMessage(msg);
                     Log.i("SUCCESS", "Message sent confirming login");
                 }
@@ -167,8 +169,8 @@ public class OpeningScreenLogin extends AppCompatActivity{
     public void login(View v) {
         Toast.makeText(this, "Attempting to connect", Toast.LENGTH_LONG).show();
 
-       // startLoginProcess();
-        openDashboard();
+        startLoginProcess();
+       // openDashboard();
 
     }
 
