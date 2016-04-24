@@ -18,8 +18,12 @@ public class Server extends Thread{
     static Socket client;
     static int status = 0;
 
-    static int[] token_list;
     static int array_tracker = 0;
+
+    static String[] logins = {"Jawad", "Ahmed", "Justin"};
+    static String[] hashed_passwords = {"", "-127-36-101-3782-4877-62054-37-404962-4885", ""};
+    static int[] token_list;
+    static int index_iterator = 3;
 
     public static int generateToken()
     {
@@ -30,6 +34,25 @@ public class Server extends Thread{
         System.out.println("Token generated: " + randomNum);
 
         return randomNum;
+    }
+
+    public static boolean checkHash(String name, String hash)
+    {
+        boolean valid = false;
+        for(int i=0;i<index_iterator;i++)
+        {
+            if(name.equals(logins[i]))
+            {
+                int index = i;
+                if(hashed_passwords[i].equals(hash))
+                {
+                    valid = true;
+                    break;
+                }
+            }
+        }
+
+        return valid;
     }
 
     public static boolean findToken(int to_find)
@@ -45,6 +68,27 @@ public class Server extends Thread{
         }
 
         return found;
+    }
+
+    public static int whereToken(int to_find)
+    {
+        int index = -1;
+        for(int i=0;i<array_tracker;i++)
+        {
+            if(to_find == token_list[i])
+            {
+                index = i;
+            }
+        }
+
+        return index;
+    }
+
+    public static void removeToken(int index)
+    {
+        System.out.println("Removing Token:" + token_list[index]);
+        token_list[index] = 0;
+        array_tracker--;
     }
 
     public static void main(String[] args) {
@@ -71,12 +115,26 @@ public class Server extends Thread{
                     if(hello.token == 0)
                     {
                         //start new login process
-                        int temp = generateToken();
-                        hello.setToken(temp);
-                        hello.setTag(1);
-                        token_list[array_tracker] = temp;
-                        array_tracker++;
-                        output.writeObject(hello);
+                        Protocol info = (Protocol) input.readObject();
+                        System.out.println("Client Pass Hash = " + info.getPass());
+                        String login_name = info.getLogin();
+                        boolean valid = checkHash(login_name, info.getPass());
+                        if(valid)
+                        {
+                            int temp = generateToken();
+                            hello.setToken(temp);
+                            hello.setTag(1);
+                            token_list[array_tracker] = temp;
+                            array_tracker++;
+                            output.writeObject(hello);
+                        }
+                        else
+                        {
+                            hello.setToken(0);
+                            hello.setTag(0);
+                            output.writeObject(hello);
+                        }
+
                     }
                     else
                     {
@@ -86,7 +144,15 @@ public class Server extends Thread{
                             //check tag for command
                             if(hello.tag == 0)
                             {
-                                //logic for handling request 0
+                                //logic for handling request 0 (LOGOUT)
+                                System.out.println("Client logout request caught");
+                                int place = whereToken(hello.token);
+                                removeToken(place);
+                                Info temp = new Info();
+                                temp.setTag(0);
+                                temp.setToken(0);
+                                output.writeObject(temp);
+                                System.out.println("Client Log Out Request Acked");
                             }
                             else if(hello.tag == 1)
                             {
@@ -127,6 +193,7 @@ public class Server extends Thread{
                         }
                         else
                         {
+                            System.out.println("Invalid Client Token submitted");
                             hello.setTag(0);
                             hello.setToken(0);
                             output.writeObject(hello);
