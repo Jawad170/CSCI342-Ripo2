@@ -90,8 +90,12 @@ public class SubjectView extends Activity implements ViewResources.onDataBaseAcc
     public void UploadNewResource(View v)
     {
         DBHandler_Resources db = new DBHandler_Resources(this);
+        String auth = User.authority;
 
-        String name = ((EditText)findViewById(R.id.UR_ResourceName_edittext)).getText().toString();
+        String name = "null";
+
+        if ( auth.equals("Teacher") ) name = ((EditText)findViewById(R.id.UR_ResourceName_edittext)).getText().toString();
+        else name = ((EditText)findViewById(R.id.UR_ResourceName_edittext)).getText().toString();
 
         //args = getArguments();
         //String subject = args.getString("subject");
@@ -99,6 +103,19 @@ public class SubjectView extends Activity implements ViewResources.onDataBaseAcc
         //String subject = ((TextView) findViewById(R.id.SV_subjectname_textview)).getText().toString();
 
         db.addResource(name, subject);
+    }
+
+    public void UploadNewGrade(View v)
+    {
+        DBHandler_Grades db = new DBHandler_Grades(this);
+        String auth = User.authority;
+
+        String name = ((TextView)findViewById(R.id.VESD_textView_studentName)).getText().toString();
+        String gradable = ((EditText)findViewById(R.id.VESD_editText_Gradable)).getText().toString();
+        int grade = Integer.parseInt(((EditText) findViewById(R.id.VESD_editText_Gradable)).getText().toString());
+        String subject = ((TextView) findViewById(R.id.SVT_subjectname_textview)).getText().toString();
+
+        db.addGrade(name, subject, gradable, grade);
     }
 
     public void switchToViewResourcesTeacher(View v)
@@ -120,8 +137,12 @@ public class SubjectView extends Activity implements ViewResources.onDataBaseAcc
     {
         DBHandler_Resources db = new DBHandler_Resources(this);
 
-        String subject = ((TextView) findViewById(R.id.SVT_subjectname_textview)).getText().toString();
-        //String subject = args.getString("subject");
+        String auth = User.authority;
+
+        String subject = "null";
+
+        if ( auth.equals("Teacher") ) subject = ((TextView) findViewById(R.id.SVT_subjectname_textview)).getText().toString();
+        else subject = ((TextView) findViewById(R.id.SV_subjectname_textview)).getText().toString();
 
         //ListView lv = (ListView) findViewById(R.id.VR_infolist_listview);
         ListView lv = LV;
@@ -137,7 +158,14 @@ public class SubjectView extends Activity implements ViewResources.onDataBaseAcc
     {
         DBHandler_Grades db = new DBHandler_Grades(this);
 
-        String subject = ((TextView) findViewById(R.id.SVT_subjectname_textview)).getText().toString();
+
+        String auth = User.authority;
+
+        String subject = "null";
+
+        if ( auth.equals("Teacher") ) subject = ((TextView) findViewById(R.id.SVT_subjectname_textview)).getText().toString();
+        else subject = ((TextView) findViewById(R.id.SV_subjectname_textview)).getText().toString();
+
         String name = student;
 
         ListView lv = LV;

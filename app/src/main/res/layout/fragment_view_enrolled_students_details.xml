@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="STUDENT NAME"
-        android:id="@+id/textView2"
+        android:id="@+id/VESD_textView_studentName"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="34dp"
@@ -22,28 +22,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Upload Grade"
-        android:id="@+id/button3"
+        android:id="@+id/VESD_button_UploadGrade"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:onClick="UploadNewGrade" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_above="@+id/button3"
+        android:id="@+id/VESD_editText_Gradable"
+        android:layout_above="@+id/VESD_button_UploadGrade"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:hint="Gradable Item"
-        android:layout_toLeftOf="@+id/editText2"
-        android:layout_toStartOf="@+id/editText2" />
+        android:layout_toLeftOf="@+id/VESD_editText_Grade"
+        android:layout_toStartOf="@+id/VESD_editText_Grade" />
 
     <EditText
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
-        android:id="@+id/editText2"
-        android:layout_alignBottom="@+id/editText"
+        android:id="@+id/VESD_editText_Grade"
+        android:layout_alignBottom="@+id/VESD_editText_Gradable"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:hint="Grade"
@@ -52,11 +53,11 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
+        android:id="@+id/VESD_listView_Grades"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/editText"
-        android:layout_below="@+id/textView2"
+        android:layout_above="@+id/VESD_editText_Gradable"
+        android:layout_below="@+id/VESD_textView_studentName"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp" />
 

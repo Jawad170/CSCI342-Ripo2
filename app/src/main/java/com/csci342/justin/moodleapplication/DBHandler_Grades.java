@@ -58,7 +58,7 @@ public class DBHandler_Grades extends SQLiteOpenHelper
 
 
     // Adding new shop
-    public void addResource(String studentName, String subject, String gradable, int grade )
+    public void addGrade(String studentName, String subject, String gradable, int grade )
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
