@@ -27,6 +27,8 @@ public class Server extends Thread{
 
         int randomNum = randInt.nextInt((9999 - 1000) + 1) + 1000;
 
+        System.out.println("Token generated: " + randomNum);
+
         return randomNum;
     }
 
@@ -71,6 +73,7 @@ public class Server extends Thread{
                         //start new login process
                         int temp = generateToken();
                         hello.setToken(temp);
+                        hello.setTag(1);
                         token_list[array_tracker] = temp;
                         array_tracker++;
                         output.writeObject(hello);
