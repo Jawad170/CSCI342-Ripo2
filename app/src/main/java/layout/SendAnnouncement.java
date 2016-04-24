@@ -89,16 +89,16 @@ public class SendAnnouncement extends Fragment {
         listview2.setAdapter(adapter2);
         */
 
-        String[] values = new String[] {"Dummy Data 1", "Dummy Data 2", "Dummy Data 3", "Dummy Data 4", "Dummy Data 5"};
+       /// String[] values = new String[] {"Dummy Data 1", "Dummy Data 2", "Dummy Data 3", "Dummy Data 4", "Dummy Data 5"};
 
-        LinearLayout linearLayout = (LinearLayout) rootView.findViewById(R.id.SA_linear_layout);
+        ///LinearLayout linearLayout = (LinearLayout) rootView.findViewById(R.id.SA_linear_layout);
 
-        for (int i = 0; i < values.length; ++i)
-        {
-            TextView txt1 = new TextView(getActivity());
-            txt1.setText(values[i]);
-            linearLayout.addView(txt1);
-        }
+        ///for (int i = 0; i < values.length; ++i)
+        ///{
+        //    TextView txt1 = new TextView(getActivity());
+        //    txt1.setText(values[i]);
+        //    linearLayout.addView(txt1);
+        ///}
 
         FrameLayout f2 = (FrameLayout) getActivity().findViewById(R.id.D_tabview_framelayout);
 
