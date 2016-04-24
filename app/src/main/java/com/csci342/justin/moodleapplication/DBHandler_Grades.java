@@ -30,7 +30,7 @@ public class DBHandler_Grades extends SQLiteOpenHelper
     private static final String KEY_NAME        = "name"    ;
     private static final String KEY_SUBJECT     = "subject" ;
     private static final String KEY_GRADABLE    = "gradable";
-    private static final String KEY_GRADE       = "grade;"  ;
+    private static final String KEY_GRADE       = "grade"  ;
 
     public DBHandler_Grades(Context context)
     {
@@ -42,7 +42,7 @@ public class DBHandler_Grades extends SQLiteOpenHelper
     {
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_RES + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-                + KEY_SUBJECT + " TEXT" + KEY_GRADABLE + " TEXT" + KEY_GRADE + " INTEGER" + ")";
+                + KEY_SUBJECT + " TEXT," + KEY_GRADABLE + " TEXT," + KEY_GRADE + " INTEGER" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 

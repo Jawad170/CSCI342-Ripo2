@@ -63,8 +63,8 @@ public class ViewEnrolledStudentsDetails extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -72,6 +72,8 @@ public class ViewEnrolledStudentsDetails extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_view_enrolled_students_details, container, false);
+
+        ((TextView)rootView.findViewById(R.id.VESD_textView_studentName)).setText(mParam1);
 
         ((SubjectView) getActivity()).GetGradesFromDataBase((ListView)rootView.findViewById(R.id.VESD_listView_Grades),
                                         ((TextView)rootView.findViewById(R.id.VESD_textView_studentName)).getText().toString() );
