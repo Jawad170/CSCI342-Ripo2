@@ -3,6 +3,7 @@ package com.csci342.justin.moodleapplication;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,6 +15,7 @@ public class ListOfSubjects extends Activity {
     Intent previous;
     Connection connect;
     Protocol User;
+   public int login_token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +26,8 @@ public class ListOfSubjects extends Activity {
         previous = getIntent();
         User = (Protocol) previous.getSerializableExtra("User");
         connect = (Connection) previous.getSerializableExtra("Connection");
-
+        login_token = previous.getIntExtra("Token",login_token);
+        Log.i("Token LOS",""+login_token);
         Spinner spinner = (Spinner) findViewById(R.id.LOS_yearselection_spinner);
 
         String[] years = new String[] {"2016", "2015", "2014"};
@@ -77,6 +80,7 @@ public class ListOfSubjects extends Activity {
         Intent i = new Intent(ListOfSubjects.this, SubjectView.class);
         i.putExtra("Subject Name", x);
         i.putExtra("User",User);
+        i.putExtra("Token",login_token);
         startActivity(i);
     }
 
@@ -90,6 +94,7 @@ public class ListOfSubjects extends Activity {
                 Intent i = new Intent(ListOfSubjects.this, SubjectView.class);
                 i.putExtra("Subject Name", x);
                 i.putExtra("User",User);
+                i.putExtra("Token",login_token);
                 startActivity(i);
 
             }

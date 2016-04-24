@@ -103,7 +103,7 @@ public class ViewResources extends Fragment {
 
 
 
-        DBAL.GetFromDatabase((ListView) rootView.findViewById(R.id.VR_infolist_listview));
+//        DBAL.GetFromDatabase((ListView) rootView.findViewById(R.id.VR_infolist_listview));
         return rootView;
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_view_resources, container, false);
@@ -153,6 +153,6 @@ public class ViewResources extends Fragment {
     {
         super.onAttach(activity);
 
-        DBAL = (onDataBaseAccessListener) activity;
+//        DBAL = (onDataBaseAccessListener) activity;
     }
 }

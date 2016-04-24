@@ -6,16 +6,28 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import layout.UploadAssignment;
 import layout.ViewEnrolledStudents;
@@ -23,8 +35,8 @@ import layout.ViewEnrolledStudentsDetails;
 import layout.ViewGrades;
 import layout.ViewResources;
 
-public class SubjectView extends Activity implements ViewResources.onDataBaseAccessListener, ViewEnrolledStudents.StudentListHandler
-{
+public class SubjectView extends Activity
+{//implements ViewResources.onDataBaseAccessListener, ViewEnrolledStudents.StudentListHandler
 
     Intent previous;
     Connection connect;
@@ -32,13 +44,26 @@ public class SubjectView extends Activity implements ViewResources.onDataBaseAcc
 
     FragmentManager fm = getFragmentManager();
     Fragment frag;
-    FrameLayout tabs;
+    LinearLayout tabs;
     Protocol User;
+    Handler myHandler;
+    public static final int PORT = 33333;
+    public static final String addr = "172.18.17.195";
+   public int login_token=0;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         previous = getIntent();
+        login_token = previous.getIntExtra("Token",login_token);
+        Log.i("Token SV"," "+login_token);
         User = (Protocol) previous.getSerializableExtra("User");
         connect = (Connection) previous.getSerializableExtra("Connection");
 
@@ -55,7 +80,7 @@ public class SubjectView extends Activity implements ViewResources.onDataBaseAcc
             frag = new ViewResources();
             FragmentTransaction ft = fm.beginTransaction();
 
-            tabs = (FrameLayout) findViewById(R.id.SVT_tabsview_framelayout);
+            tabs = (LinearLayout) findViewById(R.id.SV_linearlayout);
             tabs.removeAllViews();
             ft.replace(R.id.SVT_tabsview_framelayout, frag).commit();
         }
@@ -68,12 +93,123 @@ public class SubjectView extends Activity implements ViewResources.onDataBaseAcc
             frag = new ViewResources();
             FragmentTransaction ft = fm.beginTransaction();
 
-            tabs = (FrameLayout) findViewById(R.id.SV_tabview_framelayout);
+            tabs = (LinearLayout) findViewById(R.id.SV_linearlayout);
             tabs.removeAllViews();
-            ft.replace(R.id.SV_tabview_framelayout, frag).commit();
+            ft.replace(R.id.SV_linearlayout, frag).commit();
+        }
+
+        myHandler = new Handler()
+        {
+            @Override
+            public void handleMessage(Message msg)
+            {
+                Log.i("CAUGHT!", "Message Caught by SubViewer Handler");
+
+                if(msg.what == 4)//ViewGrades
+                {
+                int size = msg.arg1;
+                    Toaster("Loading Marks");
+                    String[] Getmark = (String[]) msg.obj;
+                    Log.i("VIEW","IT GOT HERE");
+                    ArrayList<String> Marks = new ArrayList<String>();
+                    for(int i =0; i < size ; i++)
+                    {
+                        Marks.add(Getmark[i]);
+                    }
+                    Populate(Marks);
+                }
+                else {
+                    Log.i("Bad", "From SubViewer");
+                    Toaster("Failed to Connect to server");
+                }
+            }
+        };
+
+    }
+
+
+    public void Populate(ArrayList<String> Marks)
+    {
+        ListView lv = (ListView) findViewById(R.id.SV_Marks_listview);
+        ArrayAdapter<String> AdapterMARK = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,Marks);
+        lv.setAdapter(AdapterMARK);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                                  {
+                                      public void onItemClick(AdapterView<?> arg0,View v , int position, long arg3)
+                                      {
+
+                                      }
+                                  }
+        );
+    }
+
+
+    private class get_marks_server extends Thread
+    {
+        String[] Marks;
+        String[] Max;
+        int token;
+        int size;
+        public get_marks_server(int in_token)
+        {
+            token=in_token;
+
+        }
+
+        @Override
+        public void run()
+        {
+            try
+            {
+                Socket with_server = new Socket(InetAddress.getByName(addr),PORT);
+                ObjectInputStream input = new ObjectInputStream(with_server.getInputStream());
+                ObjectOutputStream output = new ObjectOutputStream(with_server.getOutputStream());
+
+                Info request_size = new Info();
+                request_size.setTag(3);
+                request_size.setToken(token);
+                output.writeObject(request_size);
+
+                size = (int) input.readObject();
+                Marks = new String[size];
+                Marks= (String[])input.readObject();
+
+                Max = new String [size];
+                Max = (String[])input.readObject();
+
+                String TotalMark[] = new String[size];
+
+                for(int i =0 ; i<size;i++)
+                {
+                    TotalMark[i] = Marks[i] + "/" + Max[i];
+                }
+                Message msg= myHandler.obtainMessage();
+                msg.what=4;
+                msg.arg1=size;
+                msg.obj = (Object) TotalMark;
+                myHandler.sendMessage(msg);
+            }
+            catch(UnknownHostException e)
+            {
+                e.printStackTrace();
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+
         }
     }
 
+    //-----------------------------------Start of Toaster
+    public void Toaster(String input)
+    {
+        Toast.makeText(this,input,Toast.LENGTH_SHORT).show();
+    }
+    //--------------------------------------End of Toaster
     public void switchToViewResources(View v)
     {
         frag = new ViewResources();
@@ -85,7 +221,7 @@ public class SubjectView extends Activity implements ViewResources.onDataBaseAcc
         args.putString("subject", ( (TextView) findViewById(R.id.SV_subjectname_textview)).getText().toString() );
         frag.setArguments(args);
 
-        ft.replace(R.id.SV_tabview_framelayout, frag).commit();
+        ft.replace(R.id.SV_linearlayout, frag).commit();
     }
 
     public void UploadNewResource(View v)
@@ -132,8 +268,18 @@ public class SubjectView extends Activity implements ViewResources.onDataBaseAcc
         ft.replace(R.id.SVT_tabsview_framelayout, frag).commit();
         //GetFromDatabase();
     }
+    public void switchToViewGrades(View v)
+    {
+        frag = new ViewGrades();
+        FragmentTransaction ft = fm.beginTransaction();
+        tabs.removeAllViews();
+        ft.replace(R.id.SV_linearlayout, frag).commit();
 
-    @Override
+        get_marks_server getmarks = new get_marks_server(login_token);
+        getmarks.start();
+        Log.i("VIEW","IT GOT HERE");
+    }
+/*    @Override
     public void GetFromDatabase(ListView LV)
     {
         DBHandler_Resources db = new DBHandler_Resources(this);
@@ -185,13 +331,7 @@ public class SubjectView extends Activity implements ViewResources.onDataBaseAcc
         lv.setTextFilterEnabled(true);
     }
 
-    public void switchToViewGrades(View v)
-    {
-        frag = new ViewGrades();
-        FragmentTransaction ft = fm.beginTransaction();
-        tabs.removeAllViews();
-        ft.replace(R.id.SV_tabview_framelayout, frag).commit();
-    }
+
 
     @Override
     public void putUpStudentDetails(String name)
@@ -212,13 +352,13 @@ public class SubjectView extends Activity implements ViewResources.onDataBaseAcc
         //tabs.removeAllViews();
         ft.replace(R.id.SVT_tabsview_framelayout, frag).commit();
     }
-
+ */
     public void switchToUploadAssignment(View v)
     {
         frag = new UploadAssignment();
         FragmentTransaction ft = fm.beginTransaction();
         tabs.removeAllViews();
-        ft.replace(R.id.SV_tabview_framelayout, frag).commit();
+        ft.replace(R.id.SV_linearlayout, frag).commit();
     }
 
     public void switchToUploadResources(View v)

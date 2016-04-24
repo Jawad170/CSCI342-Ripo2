@@ -75,8 +75,8 @@ public class ViewEnrolledStudentsDetails extends Fragment {
 
         ((TextView)rootView.findViewById(R.id.VESD_textView_studentName)).setText(mParam1);
 
-        ((SubjectView) getActivity()).GetGradesFromDataBase((ListView)rootView.findViewById(R.id.VESD_listView_Grades),
-                                        ((TextView)rootView.findViewById(R.id.VESD_textView_studentName)).getText().toString() );
+       // ((SubjectView) getActivity()).GetGradesFromDataBase((ListView)rootView.findViewById(R.id.VESD_listView_Grades),
+                                      //  ((TextView)rootView.findViewById(R.id.VESD_textView_studentName)).getText().toString() );
 
         return rootView;
     }

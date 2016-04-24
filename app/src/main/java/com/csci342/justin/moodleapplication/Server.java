@@ -17,7 +17,13 @@ public class Server extends Thread{
     static ObjectInputStream input;
     static Socket client;
     static int status = 0;
+    static int stringannouncementarraysize= 2;
+    static String[] staticannouncements = new String[5];
 
+    static int marksarraysize = 5;
+
+    static String[] marks = new String[5];
+    static String[] max = new String[5];
     static int array_tracker = 0;
 
     static String[] logins = {"Jawad", "Ahmed", "Justin"};
@@ -165,13 +171,32 @@ public class Server extends Thread{
                                 output.writeObject(temp);
                                 System.out.println("Client Upload Announcement Request Acked");
                             }
-                            else if(hello.tag == 2)
+                            else if(hello.tag == 2)//
                             {
-                                //logic for handling request 2
+                                staticannouncements[0]="hello";
+                                staticannouncements[1]="test";
+                                output.writeObject(stringannouncementarraysize);
+                                output.writeObject(staticannouncements);
+
                             }
-                            else if(hello.tag == 3)
-                            {
-                                //logic for handling request 3
+                            else if(hello.tag == 3)// (VIEW MARKS STUDENT)
+                            {   //HARD CODE REPLACE ME
+                                staticannouncements[0]="10";
+                                staticannouncements[1]="15";
+                                staticannouncements[2]="20";
+                                staticannouncements[3]="25";
+                                staticannouncements[4]="30";
+                                max[0]="50";
+                                max[1]="50";
+                                max[2]="40";
+                                max[3]="30";
+                                max[4]="100";
+
+                                output.writeObject(marksarraysize);
+                                output.writeObject(staticannouncements);
+                                output.writeObject(max);
+
+
                             }
                             else if(hello.tag == 4)
                             {

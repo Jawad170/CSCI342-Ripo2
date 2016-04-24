@@ -68,14 +68,25 @@
             android:background="#5993bd"
             android:onClick="switchToUploadAssignment"
             />
+
     </LinearLayout>
 
-    <FrameLayout
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/SV_tabview_framelayout"
-        android:layout_below="@id/SV_tabslist_linearlayout"
-        >
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/SV_tabslist_linearlayout"
+        android:id="@+id/SV_linearlayout"
+        android:weightSum="1">
 
-    </FrameLayout>
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/SV_Marks_listview"
+        android:layout_weight="0.83"
+        android:layout_alignTop="@+id/SV_linearlayout" />
+
 </RelativeLayout>
