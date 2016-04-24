@@ -1,0 +1,57 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="layout.UploadMarks"
+    android:id="@+id/UM_framelayout">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal|top"
+        android:weightSum="1"
+        android:id="@+id/UM_linearlayout">
+
+        <TextView
+            android:layout_width="176dp"
+            android:layout_height="wrap_content"
+            android:text="         Mark"
+            android:id="@+id/UM_entermarks_textview"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.10"
+            android:textSize="25dp" />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/UM_entermarks_editext" />
+
+        <TextView
+            android:layout_width="176dp"
+            android:layout_height="wrap_content"
+            android:text="          Max"
+            android:id="@+id/UM_entermax_textview"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.10"
+            android:textSize="25dp" />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/UM_entermax_editext" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload Mark"
+            android:id="@+id/Uploadmark"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.10"
+            android:onClick="insertmarks" />
+
+    </LinearLayout>
+
+</FrameLayout>

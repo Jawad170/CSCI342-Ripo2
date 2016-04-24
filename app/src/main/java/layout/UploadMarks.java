@@ -1,32 +1,24 @@
 package layout;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.csci342.justin.moodleapplication.R;
-import com.csci342.justin.moodleapplication.SubjectView;
-
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ViewEnrolledStudents.OnFragmentInteractionListener} interface
+ * {@link UploadMarks.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ViewEnrolledStudents#newInstance} factory method to
+ * Use the {@link UploadMarks#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ViewEnrolledStudents extends Fragment {
+public class UploadMarks extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,12 +28,9 @@ public class ViewEnrolledStudents extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    ArrayList<String> studentList;
-    ArrayList<String> studentListin;
-
     private OnFragmentInteractionListener mListener;
 
-    public ViewEnrolledStudents() {
+    public UploadMarks() {
         // Required empty public constructor
     }
 
@@ -51,11 +40,11 @@ public class ViewEnrolledStudents extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ViewEnrolledStudents.
+     * @return A new instance of fragment UploadMarks.
      */
     // TODO: Rename and change types and number of parameters
-    public static ViewEnrolledStudents newInstance(String param1, String param2) {
-        ViewEnrolledStudents fragment = new ViewEnrolledStudents();
+    public static UploadMarks newInstance(String param1, String param2) {
+        UploadMarks fragment = new UploadMarks();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -72,35 +61,11 @@ public class ViewEnrolledStudents extends Fragment {
         }
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        View rootView = inflater.inflate(R.layout.fragment_view_enrolled_students, container, false);
-
-        /*ListView studentList=(ListView) rootView.findViewById(R.id.VES_list_listview);
-        studentListin = new ArrayList<String>();
-        studentListin.add("Jawad");
-        studentListin.add("Ahmed");
-        studentListin.add("Justin");
-
-        ArrayAdapter<String> myarrayAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, studentListin);
-
-        studentList.setAdapter(myarrayAdapter);
-
-        studentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            // argument position gives the index of item which is clicked
-            public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
-
-                String value = (String) arg0.getItemAtPosition(position);
-                Log.d("ViewEnrolledStudents[F]", "Clicked! Name is " + value);
-
-            }
-        });
-*/
-        return rootView;
+        return inflater.inflate(R.layout.fragment_upload_marks, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -141,5 +106,4 @@ public class ViewEnrolledStudents extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
 }

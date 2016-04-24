@@ -1,5 +1,7 @@
 package com.csci342.justin.moodleapplication;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -19,7 +21,7 @@ public class Server extends Thread{
     static int status = 0;
     static int stringannouncementarraysize= 2;
     static String[] staticannouncements = new String[5];
-
+    static String[] studentnames = new String [3];
     static int marksarraysize = 5;
 
     static String[] marks = new String[5];
@@ -198,13 +200,23 @@ public class Server extends Thread{
 
 
                             }
-                            else if(hello.tag == 4)
+                            else if(hello.tag == 4)//VIEW STUDENT NAMES.
                             {
+                                studentnames[0]="Ahmed";
+                                studentnames[1]="jwad";
+                                studentnames[2]="jstn";
+                                 int namesize = 3;
+                                output.writeObject(namesize);
+                                output.writeObject(studentnames);
                                 //logic for handling request 4
                             }
-                            else if(hello.tag == 5)
+                            else if(hello.tag == 5)//UPLOAD MARKS
                             {
-                                //logic for handling request 5
+                               int mark=0;
+                                int max =0;
+                                mark = (int) input.readObject();
+                                max= (int) input.readObject();
+                                System.out.println("mark :" + mark + " max : "+ max);
                             }
                             else if(hello.tag == 6)
                             {
