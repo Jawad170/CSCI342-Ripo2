@@ -34,7 +34,7 @@ public class OpeningScreenLogin extends AppCompatActivity{
     Protocol User;
 
     public static final int PORT = 33333;
-    public static final String addr = "192.168.1.134";
+    public static final String addr = "172.18.16.78";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

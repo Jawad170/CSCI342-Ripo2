@@ -94,7 +94,7 @@ public class SubjectView extends Activity implements ViewResources.onDataBaseAcc
 
         //args = getArguments();
         //String subject = args.getString("subject");
-        String subject = "CSCI015";
+        String subject = ((TextView) findViewById(R.id.SVT_subjectname_textview)).getText().toString();
         //String subject = ((TextView) findViewById(R.id.SV_subjectname_textview)).getText().toString();
 
         db.addResource(name, subject);
@@ -119,7 +119,7 @@ public class SubjectView extends Activity implements ViewResources.onDataBaseAcc
     {
         DBHandler_Resources db = new DBHandler_Resources(this);
 
-        String subject = "CSCI015";
+        String subject = ((TextView) findViewById(R.id.SVT_subjectname_textview)).getText().toString();
         //String subject = args.getString("subject");
 
         //ListView lv = (ListView) findViewById(R.id.VR_infolist_listview);
