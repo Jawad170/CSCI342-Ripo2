@@ -117,7 +117,7 @@ public class OpeningScreenLogin extends AppCompatActivity{
                 Mylogin.setTag(0);
                 Mylogin.setToken(0);
                 output.writeObject(Mylogin);
-
+                output.writeObject(the_user);
                 Log.i("WAITING", "Waiting for Server Reply");
 
                 Info temp = (Info) input.readObject();
