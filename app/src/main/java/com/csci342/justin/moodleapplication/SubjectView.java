@@ -36,7 +36,6 @@ public class SubjectView extends Activity implements ViewResources.onDataBaseAcc
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         previous = getIntent();
         User = (Protocol) previous.getSerializableExtra("User");
         connect = (Connection) previous.getSerializableExtra("Connection");
@@ -214,5 +213,6 @@ public class SubjectView extends Activity implements ViewResources.onDataBaseAcc
         FragmentTransaction ft = fm.beginTransaction();
         tabs.removeAllViews();
         ft.replace(R.id.SVT_tabsview_framelayout, frag).commit();
+
     }
 }
