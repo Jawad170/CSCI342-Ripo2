@@ -21,7 +21,7 @@ public class Server extends Thread{
     static int array_tracker = 0;
 
     static String[] logins = {"Jawad", "Ahmed", "Justin"};
-    static String[] hashed_passwords = {"", "-127-36-101-3782-4877-62054-37-404962-4885", ""};
+    static String[] hashed_passwords = {"-101-29-70358493-69-3810911689-868-3102108", "-127-36-101-3782-4877-62054-37-404962-4885", "-9641-48-33-124-218573-5865-3274-98-13-119-27"};
     static int[] token_list;
     static int index_iterator = 3;
 
@@ -58,7 +58,7 @@ public class Server extends Thread{
     public static boolean findToken(int to_find)
     {
         boolean found = false;
-        for(int i=0;i<array_tracker;i++)
+        for(int i=0;i<index_iterator;i++)
         {
             if(to_find == token_list[i])
             {
@@ -73,11 +73,12 @@ public class Server extends Thread{
     public static int whereToken(int to_find)
     {
         int index = -1;
-        for(int i=0;i<array_tracker;i++)
+        for(int i=0;i<index_iterator;i++)
         {
             if(to_find == token_list[i])
             {
                 index = i;
+                break;
             }
         }
 
@@ -86,9 +87,8 @@ public class Server extends Thread{
 
     public static void removeToken(int index)
     {
-        System.out.println("Removing Token:" + token_list[index]);
+        System.out.println("Removing Login Token:" + token_list[index]);
         token_list[index] = 0;
-        array_tracker--;
     }
 
     public static void main(String[] args) {
@@ -156,7 +156,14 @@ public class Server extends Thread{
                             }
                             else if(hello.tag == 1)
                             {
-                                //logic for handling request 1
+                                //logic for handling request 1 (ANNOUNCMENT)
+                                System.out.println("Upload Announcement request caught");
+                                output.writeObject(hello);
+                                String announcement = (String)input.readObject();
+                                System.out.println("Received Announcement: " + announcement);
+                                int temp = 1;
+                                output.writeObject(temp);
+                                System.out.println("Client Upload Announcement Request Acked");
                             }
                             else if(hello.tag == 2)
                             {

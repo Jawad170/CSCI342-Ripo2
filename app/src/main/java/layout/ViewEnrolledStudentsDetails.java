@@ -1,32 +1,27 @@
 package layout;
 
-import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.csci342.justin.moodleapplication.R;
 import com.csci342.justin.moodleapplication.SubjectView;
 
-import java.util.ArrayList;
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ViewEnrolledStudents.OnFragmentInteractionListener} interface
+ * {@link ViewEnrolledStudentsDetails.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ViewEnrolledStudents#newInstance} factory method to
+ * Use the {@link ViewEnrolledStudentsDetails#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ViewEnrolledStudents extends Fragment {
+public class ViewEnrolledStudentsDetails extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,14 +31,12 @@ public class ViewEnrolledStudents extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    ArrayList<String> studentList;
-    ArrayList<String> studentListin;
-
     private OnFragmentInteractionListener mListener;
 
-    StudentListHandler SLH;
 
-    public ViewEnrolledStudents() {
+    View rootView;
+
+    public ViewEnrolledStudentsDetails() {
         // Required empty public constructor
     }
 
@@ -56,8 +49,8 @@ public class ViewEnrolledStudents extends Fragment {
      * @return A new instance of fragment ViewEnrolledStudents.
      */
     // TODO: Rename and change types and number of parameters
-    public static ViewEnrolledStudents newInstance(String param1, String param2) {
-        ViewEnrolledStudents fragment = new ViewEnrolledStudents();
+    public static ViewEnrolledStudentsDetails newInstance(String param1, String param2) {
+        ViewEnrolledStudentsDetails fragment = new ViewEnrolledStudentsDetails();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -70,42 +63,20 @@ public class ViewEnrolledStudents extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
-    }
 
-    public interface StudentListHandler
-    {
-        public void putUpStudentDetails(String name);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        rootView = inflater.inflate(R.layout.fragment_view_enrolled_students_details, container, false);
 
-        View rootView = inflater.inflate(R.layout.fragment_view_enrolled_students, container, false);
+        ((TextView)rootView.findViewById(R.id.VESD_textView_studentName)).setText(mParam1);
 
-        ListView studentList=(ListView) rootView.findViewById(R.id.VES_list_listview);
-        studentListin = new ArrayList<String>();
-        studentListin.add("Jawad");
-        studentListin.add("Ahmed");
-        studentListin.add("Justin");
-
-        ArrayAdapter<String> myarrayAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, studentListin);
-
-        studentList.setAdapter(myarrayAdapter);
-
-        studentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            // argument position gives the index of item which is clicked
-            public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
-
-                String value = (String) arg0.getItemAtPosition(position);
-                Log.d("ViewEnrolledStudents[F]", "Clicked! Name is " + value);
-                SLH.putUpStudentDetails(value);
-
-            }
-        });
+        ((SubjectView) getActivity()).GetGradesFromDataBase((ListView)rootView.findViewById(R.id.VESD_listView_Grades),
+                                        ((TextView)rootView.findViewById(R.id.VESD_textView_studentName)).getText().toString() );
 
         return rootView;
     }
@@ -147,13 +118,5 @@ public class ViewEnrolledStudents extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    @Override
-    public void onAttach(Activity activity)
-    {
-        super.onAttach(activity);
-
-        SLH = (StudentListHandler) activity;
     }
 }
