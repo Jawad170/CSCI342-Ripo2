@@ -6,7 +6,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -269,6 +268,8 @@ public class Dashboard extends Activity {
     //--------------------Start of Send Announcement THREAD
     private class send_announcement_server extends Thread
     {
+
+
         String Announcement;
         int token_from_login;
         int ack=0;
