@@ -20,7 +20,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +30,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.List;
 
 import layout.EditPersonalDetails;
 import layout.InsertAnnouncement;
@@ -50,7 +48,7 @@ public class Dashboard extends Activity {
     Handler myHandler;
     public  int login_token = 0;
     public static final int PORT = 33333;
-    public static final String addr = "172.18.17.195";
+    public static final String addr = "172.18.26.249";
 
 
     @Override

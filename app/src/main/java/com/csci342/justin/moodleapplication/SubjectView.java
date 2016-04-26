@@ -16,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,13 +27,10 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
 
 import layout.UploadAssignment;
 import layout.UploadMarks;
 import layout.ViewEnrolledStudents;
-import layout.ViewEnrolledStudentsDetails;
 import layout.ViewGrades;
 import layout.ViewResources;
 
@@ -52,7 +48,7 @@ public class SubjectView extends Activity
     Protocol User;
     Handler myHandler;
     public static final int PORT = 33333;
-    public static final String addr = "172.18.17.195";
+    public static final String addr = "172.18.26.249";
    public int login_token=0;
 
     @Override
