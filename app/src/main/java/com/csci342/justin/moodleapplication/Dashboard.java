@@ -48,7 +48,7 @@ public class Dashboard extends Activity {
     Handler myHandler;
     public  int login_token = 0;
     public static final int PORT = 33333;
-    public static final String addr = "172.18.26.249";
+    public static final String addr = "192.168.1.134";
 
 
     @Override
@@ -319,7 +319,7 @@ public class Dashboard extends Activity {
                     Message msg = myHandler.obtainMessage();
                     msg.what=0;
                     myHandler.sendMessage(msg);
-                    Log.i("Failire ","Denied Connection to server");
+                    Log.i("Failure ","Denied Connection to server");
                 }
 
 
