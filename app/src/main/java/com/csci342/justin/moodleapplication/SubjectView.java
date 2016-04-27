@@ -16,25 +16,25 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
 
 import layout.UploadAssignment;
 import layout.UploadMarks;
 import layout.ViewEnrolledStudents;
-import layout.ViewEnrolledStudentsDetails;
 import layout.ViewGrades;
 import layout.ViewResources;
 
@@ -52,7 +52,8 @@ public class SubjectView extends Activity
     Protocol User;
     Handler myHandler;
     public static final int PORT = 33333;
-    public static final String addr = "172.18.17.195";
+    public static final int PORT2 = 33334;
+    public static final String addr = "192.168.1.134";
    public int login_token=0;
 
     @Override
@@ -146,6 +147,11 @@ public class SubjectView extends Activity
                     get_students_server viewstudents = new get_students_server(login_token);
                     viewstudents.start();
                 }
+                else if(msg.what==7)
+                {
+                    Toaster("File Uploaded Successfully");
+
+                }
                 else {
                     Log.i("Bad", "From SubViewer");
                     Toaster("Failed to Connect to server");
@@ -197,6 +203,74 @@ public class SubjectView extends Activity
                                   }
         );
     }
+
+    private class upload_resources extends Thread
+    {
+        int token;
+
+        public upload_resources(int login_token)
+        {
+            token = login_token;
+        }
+
+        @Override
+        public void run()
+        {
+            try
+            {
+                Socket with_server = new Socket(InetAddress.getByName(addr),PORT);
+                ObjectInputStream input = new ObjectInputStream(with_server.getInputStream());
+                ObjectOutputStream output = new ObjectOutputStream(with_server.getOutputStream());
+
+                Log.i("FILE UPLOAD", "Requesting File Upload");
+                Info send_request = new Info();
+                send_request.setTag(6);
+                send_request.setToken(token);
+                output.writeObject(send_request);
+
+                Info response = (Info)input.readObject();
+                if(response.tag == 1)
+                {
+                    Socket send_file = new Socket(InetAddress.getByName(addr),PORT2);
+                    File file_to_send = new File("/mnt/extSdCard/MOODLE/Transfer Test File.pdf");
+                    byte[] array_to_send  = new byte [(int)file_to_send.length()];
+                    output.writeObject(array_to_send.length);
+                    output.writeObject(file_to_send.getName());
+                    FileInputStream fis = new FileInputStream(file_to_send);
+                    BufferedInputStream bis = new BufferedInputStream(fis);
+                    bis.read(array_to_send,0,array_to_send.length);
+                    OutputStream os = send_file.getOutputStream();
+                    os.write(array_to_send,0,array_to_send.length);
+                    os.close();
+                    send_file.close();
+                }
+                else
+                {
+                    Log.i("SERVER", "Rejected upload request");
+                    return;
+                }
+
+                Log.i("MESSAGE", "Sending message to main thread");
+                Message msg= myHandler.obtainMessage();
+                msg.what=7;
+                myHandler.sendMessage(msg);
+
+            }
+            catch(UnknownHostException e)
+            {
+                e.printStackTrace();
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace();
+            }
+            catch(ClassNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private class upload_marks_server extends Thread
     {
         int mark;
@@ -382,6 +456,13 @@ public class SubjectView extends Activity
 
 
 
+    }
+
+    public void UploadTest(View v)
+    {
+        Log.i("CLIENT", "Starting Upload Test");
+        upload_resources x = new upload_resources(login_token);
+        x.start();
     }
 
     public void UploadNewGrade(View v)

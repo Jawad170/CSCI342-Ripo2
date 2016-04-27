@@ -1,8 +1,11 @@
 package com.csci342.justin.moodleapplication;
 
-import android.util.Log;
-
+import java.io.BufferedOutputStream;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -105,7 +108,7 @@ public class Server extends Thread{
 
         while (true) {
             try {
-                serverSocket = new MyServerSocket(33333);
+                serverSocket = new ServerSocket(33333);
                 System.out.println("Server Setup, waiting...");
 
                 while (true) {
@@ -220,7 +223,74 @@ public class Server extends Thread{
                             }
                             else if(hello.tag == 6)
                             {
-                                //logic for handling request 6
+                                //logic for handling request 6 (UPLOAD FILES)
+                                ServerSocket fileserverSocket = new ServerSocket(33334);
+                                System.out.println("File Transfer Server Setup, waiting...");
+
+                                Info temp = new Info();
+                                temp.setTag(1);
+                                output.writeObject(temp);
+                                try
+                                {
+                                    Socket file_client = fileserverSocket.accept();
+                                    System.out.println("New File transfer connection established");
+                                    int filesize = (int) input.readObject();
+                                    String filename = (String) input.readObject();
+                                    byte[] received_file = new byte[65536];
+                                    InputStream is = file_client.getInputStream();
+                                    FileOutputStream fos = new FileOutputStream(filename);
+                                    BufferedOutputStream bos = new BufferedOutputStream(fos);
+                                    System.out.println("Reading File now");
+                                    int bytesRead;
+                                    byte[] bigarray = new byte[1000000];
+                                    int position = 0;
+
+                                    do {
+                                        bytesRead = is.read(received_file, 0, received_file.length);
+
+                                        int counter = 0;
+                                        for(int i=position;i<position+bytesRead;i++)
+                                        {
+                                            bigarray[i] = received_file[counter];
+                                            counter++;
+                                        }
+                                        position += bytesRead;
+                                        System.out.println("bytesRead = " + bytesRead);
+                                        System.out.println("Position = " + position);
+
+                                    }while(bytesRead == 65536);
+
+                                    System.out.println("Received byte_array: " + bytesRead + " bytes read.");
+
+                                    is.close();
+                                    fos.close();
+                                    bos.close();
+                                    File to_make = new File(filename);
+                                    FileOutputStream converter = new FileOutputStream(to_make);
+
+                                    converter.getFD().sync();
+                                    for(int i=0;i<position;i++) {
+                                        converter.write(bigarray[i]);
+                                    }
+                                    converter.getFD().sync();
+                                    converter.flush();
+
+                                    System.out.println("Received File: " + filename);
+                                    converter.close();
+                                    fileserverSocket.close();
+
+                                }catch(EOFException e)
+                                {
+                                    e.printStackTrace();
+                                }catch(IOException e)
+                                {
+                                    e.printStackTrace();
+                                }
+
+                                hello.setTag(1);
+                                output.writeObject(hello);
+
+
                             }
                             else if(hello.tag == 7)
                             {
