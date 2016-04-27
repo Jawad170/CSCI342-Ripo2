@@ -23,7 +23,7 @@ public class Connection extends Thread implements Serializable {
     ObjectInputStream input;
     Info temp;
     int status = 0;
-
+    //this is to upload. Delete me later
     public Connection()
     {
 
