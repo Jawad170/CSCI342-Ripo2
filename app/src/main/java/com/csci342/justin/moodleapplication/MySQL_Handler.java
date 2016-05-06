@@ -19,16 +19,16 @@ public class MySQL_Handler
     //MAIN IS USED ONLY TO TEST THE GET/SET FUNCTIONS, REMOVE FOR FINAL VERSION.
     public static void main(String[] args)
     {
-        //TEST GETTING ANNOUNCEMENTS
+        ///TEST GETTING ANNOUNCEMENTS
         String[] testAnnouncements;
         testAnnouncements = getAnnouncements("CSCI222");
         for ( int i = 0; i < testAnnouncements.length; i++ )
         { System.out.println(testAnnouncements[i]); }
 
-        //TEST ADDING GRADE
-        addGrade("CSCI222", "Justin", "Deliverable 1", 4, 5);
+        ///TEST ADDING GRADE
+        //addGrade("CSCI222", "Justin", "Deliverable 1", 4, 5);
 
-        //TEST GETTING GRADES
+        ///TEST GETTING GRADES
         String[] testGrades;
         testGrades = getGrades("CSCI222", "Justin");
         for ( int i = 0; i < testGrades.length; i++ )
