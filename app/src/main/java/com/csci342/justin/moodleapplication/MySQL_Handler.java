@@ -95,8 +95,13 @@ public class MySQL_Handler
             //{ System.out.println(Subjects[i]); }
         //.....................................................................
 
-        System.out.println("\n Is Justin Enrolled in CSCI222? " + IsEnrolledInSubject("Justin", "CSCI222"));
-        System.out.println("\n Is Justin Enrolled in it's Tutorial? " + IsEnrolledInTutorial("Justin", "CSCI222"));
+
+        //System.out.println("\n Is Justin Enrolled in CSCI323? " + IsEnrolledInSubject("Justin", "CSCI323"));
+        //System.out.println("\n Is Justin Enrolled in it's Tutorial? " + IsEnrolledInTutorial("Justin", "CSCI323"));
+
+
+
+
     }
 
     //Connects to database and returns a Statement object ready to execute sql.
@@ -486,6 +491,39 @@ public class MySQL_Handler
             else return false;
         }
     }
+
+    public static boolean enrollInSubject(String Student, String Subject)
+    {
+        try
+        {
+            String sqlQuery = "INSERT INTO `tbl_enrollments` (`Student`, `Enrolled`, `Type`) VALUES ('"
+                    + Student + "', '" + Subject + "', '1');";
+            startConnection().execute(sqlQuery);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean enrollInTutorial(String Student, String Subject)
+    {
+        try
+        {
+            String sqlQuery = "INSERT INTO `tbl_enrollments` (`Student`, `Enrolled`, `Type`) VALUES ('"
+                    + Student + "', '" + Subject + "', '2');";
+            startConnection().execute(sqlQuery);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
 
 
