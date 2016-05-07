@@ -101,7 +101,6 @@ public class MySQL_Handler
 
 
 
-
     }
 
     //Connects to database and returns a Statement object ready to execute sql.
@@ -526,6 +525,69 @@ public class MySQL_Handler
 
 
 
+
+    //RESETS ALL TABLES TO DEFAULT VALUES
+    public static boolean RESET_DATABASE()
+    {
+        try
+        {
+            String NextQuery = null;
+
+            //RESETTING ANNOUNCEMENTS TABLE
+            NextQuery = "DELETE FROM tbl_announcements;";
+            startConnection().execute(NextQuery);
+            NextQuery = "INSERT INTO `tbl_announcements` (`Subject`, `Announcement`, `Date`) VALUES ('CSCI203', 'Assignment due in n^2 hours.', '2016-05-05');";
+            startConnection().execute(NextQuery);
+            NextQuery = "INSERT INTO `tbl_announcements` (`Subject`, `Announcement`, `Date`) VALUES ('CSCI222', 'Sample Announcement For CSCSI222.', '2016-05-03');";
+            startConnection().execute(NextQuery);
+            NextQuery = "INSERT INTO `tbl_announcements` (`Subject`, `Announcement`, `Date`) VALUES ('CSCI222', 'Tutorial Room Changed to Food Court', '2016-04-17');";
+            startConnection().execute(NextQuery);
+            NextQuery = "INSERT INTO `tbl_announcements` (`Subject`, `Announcement`, `Date`) VALUES ('CSCI124', 'This subject is not difficult. Stop Complainings.', '2016-04-28');";
+            startConnection().execute(NextQuery);
+            NextQuery = "INSERT INTO `tbl_announcements` (`Subject`, `Announcement`, `Date`) VALUES ('CSCI015', 'Exam will be easy, calm down.', '2016-05-01');";
+            startConnection().execute(NextQuery);
+
+            //RESETTING ENROLLMENTS TABLE
+            NextQuery = "DELETE FROM tbl_enrollments;";
+            startConnection().execute(NextQuery);
+            NextQuery = "INSERT INTO `tbl_enrollments` (`Student`, `Enrolled`, `Type`) VALUES ('Jawad', 'CSCI342', '1');";
+            startConnection().execute(NextQuery);
+            NextQuery = "INSERT INTO `tbl_enrollments` (`Student`, `Enrolled`, `Type`) VALUES ('Jawad', 'CSCI342', '2');";
+            startConnection().execute(NextQuery);
+            NextQuery = "INSERT INTO `tbl_enrollments` (`Student`, `Enrolled`, `Type`) VALUES ('Justin', 'CSCI342', '1');";
+            startConnection().execute(NextQuery);
+            NextQuery = "INSERT INTO `tbl_enrollments` (`Student`, `Enrolled`, `Type`) VALUES ('Justin', 'CSCI342', '2');";
+            startConnection().execute(NextQuery);
+            NextQuery = "INSERT INTO `tbl_enrollments` (`Student`, `Enrolled`, `Type`) VALUES ('Ahmed', 'CSCI342', '1');";
+            startConnection().execute(NextQuery);
+            NextQuery = "INSERT INTO `tbl_enrollments` (`Student`, `Enrolled`, `Type`) VALUES ('Ahmed', 'CSCI342', '2');";
+            startConnection().execute(NextQuery);
+
+            //RESETTING GRADES TABLE
+            NextQuery = "DELETE FROM tbl_grades;";
+            startConnection().execute(NextQuery);
+            NextQuery = "INSERT INTO `tbl_grades` (`Subject`, `Student`, `Graded_Item`, `Grade_Achieved`, `Grade_Max`) VALUES ('CSCI342', 'Jawad', 'Virtual Assignment 1', '8', '10');";
+            startConnection().execute(NextQuery);
+            NextQuery = "INSERT INTO `tbl_grades` (`Subject`, `Student`, `Graded_Item`, `Grade_Achieved`, `Grade_Max`) VALUES ('CSCI342', 'Jawad', 'Virtual Exam', '26', '30');";
+            startConnection().execute(NextQuery);
+            NextQuery = "INSERT INTO `tbl_grades` (`Subject`, `Student`, `Graded_Item`, `Grade_Achieved`, `Grade_Max`) VALUES ('CSCI342', 'Justin', 'Virtual Assignment 1', '9', '10');";
+            startConnection().execute(NextQuery);
+            NextQuery = "INSERT INTO `tbl_grades` (`Subject`, `Student`, `Graded_Item`, `Grade_Achieved`, `Grade_Max`) VALUES ('CSCI342', 'Justin', 'Virtual Exam', '28', '30');";
+            startConnection().execute(NextQuery);
+            NextQuery = "INSERT INTO `tbl_grades` (`Subject`, `Student`, `Graded_Item`, `Grade_Achieved`, `Grade_Max`) VALUES ('CSCI342', 'Ahmed', 'Virtual Assignment 1', '9', '10');";
+            startConnection().execute(NextQuery);
+            NextQuery = "INSERT INTO `tbl_grades` (`Subject`, `Student`, `Graded_Item`, `Grade_Achieved`, `Grade_Max`) VALUES ('CSCI342', 'Ahmed', 'Virtual Exam', '27', '30');";
+            startConnection().execute(NextQuery);
+
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public static String getToday()
     {
