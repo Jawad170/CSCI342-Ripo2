@@ -100,7 +100,6 @@ public class MySQL_Handler
         //System.out.println("\n Is Justin Enrolled in it's Tutorial? " + IsEnrolledInTutorial("Justin", "CSCI323"));
 
 
-
     }
 
     //Connects to database and returns a Statement object ready to execute sql.
@@ -497,6 +496,22 @@ public class MySQL_Handler
         {
             String sqlQuery = "INSERT INTO `tbl_enrollments` (`Student`, `Enrolled`, `Type`) VALUES ('"
                     + Student + "', '" + Subject + "', '1');";
+            startConnection().execute(sqlQuery);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean dropSubject(String Student, String Subject)
+    {
+        try
+        {
+            String sqlQuery = "DELETE FROM `tbl_enrollments` WHERE Enrolled = \""
+                    + Subject  + "\" AND Student = \"" + Student + "\"";
             startConnection().execute(sqlQuery);
             return true;
         }
