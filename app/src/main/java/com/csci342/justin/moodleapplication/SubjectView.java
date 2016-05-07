@@ -53,7 +53,7 @@ public class SubjectView extends Activity
     Handler myHandler;
     public static final int PORT = 33333;
     public static final int PORT2 = 33334;
-    public static final String addr = "192.168.1.134";
+    public static final String addr = "172.18.29.57";
    public int login_token=0;
 
     @Override
