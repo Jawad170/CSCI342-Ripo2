@@ -19,6 +19,8 @@ public class MySQL_Handler
     private static final String user = "csci342username";
     private static final String pass = "1234";
 
+    private static Connection con;
+
     //MAIN IS USED ONLY TO TEST THE GET/SET FUNCTIONS, REMOVE FOR FINAL VERSION.
     public static void main(String[] args)
     {
@@ -111,7 +113,7 @@ public class MySQL_Handler
         try
         {
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, user, pass);
+            con = DriverManager.getConnection(url, user, pass);
             st = con.createStatement();
         }
         catch ( Exception e )
@@ -155,6 +157,8 @@ public class MySQL_Handler
         }
         finally
         {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
             return announcements;
         }
 
@@ -189,6 +193,8 @@ public class MySQL_Handler
         }
         finally
         {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
             return announcements;
         }
 
@@ -210,6 +216,11 @@ public class MySQL_Handler
         {
             e.printStackTrace();
             return false;
+        }
+        finally
+        {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
         }
     }
 
@@ -242,6 +253,8 @@ public class MySQL_Handler
         }
         finally
         {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
             return grades;
         }
     }
@@ -260,6 +273,11 @@ public class MySQL_Handler
         {
             e.printStackTrace();
             return false;
+        }
+        finally
+        {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
         }
     }
 
@@ -284,6 +302,8 @@ public class MySQL_Handler
         }
         finally
         {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
             return hash;
         }
     }
@@ -309,6 +329,8 @@ public class MySQL_Handler
         }
         finally
         {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
             return auth;
         }
     }
@@ -334,6 +356,8 @@ public class MySQL_Handler
         }
         finally
         {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
             return token;
         }
     }
@@ -351,6 +375,11 @@ public class MySQL_Handler
         {
             e.printStackTrace();
             return false;
+        }
+        finally
+        {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
         }
     }
 
@@ -374,6 +403,8 @@ public class MySQL_Handler
         }
         finally
         {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
             return username;
         }
     }
@@ -402,6 +433,8 @@ public class MySQL_Handler
         }
         finally
         {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
             return PI;
         }
     }
@@ -427,6 +460,11 @@ public class MySQL_Handler
         {
             e.printStackTrace();
             return false;
+        }
+        finally
+        {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
         }
     }
 
@@ -459,6 +497,8 @@ public class MySQL_Handler
         }
         finally
         {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
             return subjects;
         }
     }
@@ -485,6 +525,8 @@ public class MySQL_Handler
         }
         finally
         {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
             if ( type == 1) return true;
             else return false;
         }
@@ -512,6 +554,8 @@ public class MySQL_Handler
         }
         finally
         {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
             if ( type == 2) return true;
             else return false;
         }
@@ -531,6 +575,11 @@ public class MySQL_Handler
             e.printStackTrace();
             return false;
         }
+        finally
+        {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
+        }
     }
 
     public static boolean dropSubject(String Student, String Subject)
@@ -546,6 +595,11 @@ public class MySQL_Handler
         {
             e.printStackTrace();
             return false;
+        }
+        finally
+        {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
         }
     }
 
@@ -563,6 +617,11 @@ public class MySQL_Handler
             e.printStackTrace();
             return false;
         }
+        finally
+        {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
+        }
     }
 
 
@@ -574,52 +633,53 @@ public class MySQL_Handler
         try
         {
             String NextQuery = null;
+            Statement resetStatement = startConnection();
 
             //RESETTING ANNOUNCEMENTS TABLE
             NextQuery = "DELETE FROM tbl_announcements;";
-            startConnection().execute(NextQuery);
+            resetStatement.execute(NextQuery);
             NextQuery = "INSERT INTO `tbl_announcements` (`Subject`, `Announcement`, `Date`) VALUES ('CSCI203', 'Assignment due in n^2 hours.', '2016-05-05');";
-            startConnection().execute(NextQuery);
+            resetStatement.execute(NextQuery);
             NextQuery = "INSERT INTO `tbl_announcements` (`Subject`, `Announcement`, `Date`) VALUES ('CSCI222', 'Sample Announcement For CSCSI222.', '2016-05-03');";
-            startConnection().execute(NextQuery);
+            resetStatement.execute(NextQuery);
             NextQuery = "INSERT INTO `tbl_announcements` (`Subject`, `Announcement`, `Date`) VALUES ('CSCI222', 'Tutorial Room Changed to Food Court', '2016-04-17');";
-            startConnection().execute(NextQuery);
+            resetStatement.execute(NextQuery);
             NextQuery = "INSERT INTO `tbl_announcements` (`Subject`, `Announcement`, `Date`) VALUES ('CSCI124', 'This subject is not difficult. Stop Complainings.', '2016-04-28');";
-            startConnection().execute(NextQuery);
+            resetStatement.execute(NextQuery);
             NextQuery = "INSERT INTO `tbl_announcements` (`Subject`, `Announcement`, `Date`) VALUES ('CSCI015', 'Exam will be easy, calm down.', '2016-05-01');";
-            startConnection().execute(NextQuery);
+            resetStatement.execute(NextQuery);
 
             //RESETTING ENROLLMENTS TABLE
             NextQuery = "DELETE FROM tbl_enrollments;";
-            startConnection().execute(NextQuery);
+            resetStatement.execute(NextQuery);
             NextQuery = "INSERT INTO `tbl_enrollments` (`Student`, `Enrolled`, `Type`) VALUES ('Jawad', 'CSCI342', '1');";
-            startConnection().execute(NextQuery);
+            resetStatement.execute(NextQuery);
             NextQuery = "INSERT INTO `tbl_enrollments` (`Student`, `Enrolled`, `Type`) VALUES ('Jawad', 'CSCI342', '2');";
-            startConnection().execute(NextQuery);
+            resetStatement.execute(NextQuery);
             NextQuery = "INSERT INTO `tbl_enrollments` (`Student`, `Enrolled`, `Type`) VALUES ('Justin', 'CSCI342', '1');";
-            startConnection().execute(NextQuery);
+            resetStatement.execute(NextQuery);
             NextQuery = "INSERT INTO `tbl_enrollments` (`Student`, `Enrolled`, `Type`) VALUES ('Justin', 'CSCI342', '2');";
-            startConnection().execute(NextQuery);
+            resetStatement.execute(NextQuery);
             NextQuery = "INSERT INTO `tbl_enrollments` (`Student`, `Enrolled`, `Type`) VALUES ('Ahmed', 'CSCI342', '1');";
-            startConnection().execute(NextQuery);
+            resetStatement.execute(NextQuery);
             NextQuery = "INSERT INTO `tbl_enrollments` (`Student`, `Enrolled`, `Type`) VALUES ('Ahmed', 'CSCI342', '2');";
-            startConnection().execute(NextQuery);
+            resetStatement.execute(NextQuery);
 
             //RESETTING GRADES TABLE
             NextQuery = "DELETE FROM tbl_grades;";
-            startConnection().execute(NextQuery);
+            resetStatement.execute(NextQuery);
             NextQuery = "INSERT INTO `tbl_grades` (`Subject`, `Student`, `Graded_Item`, `Grade_Achieved`, `Grade_Max`) VALUES ('CSCI342', 'Jawad', 'Virtual Assignment 1', '8', '10');";
-            startConnection().execute(NextQuery);
+            resetStatement.execute(NextQuery);
             NextQuery = "INSERT INTO `tbl_grades` (`Subject`, `Student`, `Graded_Item`, `Grade_Achieved`, `Grade_Max`) VALUES ('CSCI342', 'Jawad', 'Virtual Exam', '26', '30');";
-            startConnection().execute(NextQuery);
+            resetStatement.execute(NextQuery);
             NextQuery = "INSERT INTO `tbl_grades` (`Subject`, `Student`, `Graded_Item`, `Grade_Achieved`, `Grade_Max`) VALUES ('CSCI342', 'Justin', 'Virtual Assignment 1', '9', '10');";
-            startConnection().execute(NextQuery);
+            resetStatement.execute(NextQuery);
             NextQuery = "INSERT INTO `tbl_grades` (`Subject`, `Student`, `Graded_Item`, `Grade_Achieved`, `Grade_Max`) VALUES ('CSCI342', 'Justin', 'Virtual Exam', '28', '30');";
-            startConnection().execute(NextQuery);
+            resetStatement.execute(NextQuery);
             NextQuery = "INSERT INTO `tbl_grades` (`Subject`, `Student`, `Graded_Item`, `Grade_Achieved`, `Grade_Max`) VALUES ('CSCI342', 'Ahmed', 'Virtual Assignment 1', '9', '10');";
-            startConnection().execute(NextQuery);
+            resetStatement.execute(NextQuery);
             NextQuery = "INSERT INTO `tbl_grades` (`Subject`, `Student`, `Graded_Item`, `Grade_Achieved`, `Grade_Max`) VALUES ('CSCI342', 'Ahmed', 'Virtual Exam', '27', '30');";
-            startConnection().execute(NextQuery);
+            resetStatement.execute(NextQuery);
 
             //TEMPORARY - Hardcoded reset of tokens for only 3 users.
             setToken("Justin", 0);
@@ -633,6 +693,11 @@ public class MySQL_Handler
         {
             e.printStackTrace();
             return false;
+        }
+        finally
+        {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
         }
     }
 
