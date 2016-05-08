@@ -99,7 +99,6 @@ public class MySQL_Handler
         //System.out.println("\n Is Justin Enrolled in CSCI323? " + IsEnrolledInSubject("Justin", "CSCI323"));
         //System.out.println("\n Is Justin Enrolled in it's Tutorial? " + IsEnrolledInTutorial("Justin", "CSCI323"));
 
-
     }
 
     //Connects to database and returns a Statement object ready to execute sql.
@@ -196,7 +195,7 @@ public class MySQL_Handler
     }
 
     //Adds announcement to database to the specified subject with todays date
-    public static void addAnnouncement(String Subject, String AnnouncementText)
+    public static boolean addAnnouncement(String Subject, String AnnouncementText)
     {
         String today = getToday();
 
@@ -205,10 +204,12 @@ public class MySQL_Handler
             String sqlQuery = "INSERT INTO `tbl_announcements` (`Subject`, `Announcement`, `Date`) VALUES ('"
                     + Subject + "', '" + AnnouncementText + "', '" + today + "');";
             startConnection().execute(sqlQuery);
+            return true;
         }
         catch (Exception e)
         {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -246,17 +247,19 @@ public class MySQL_Handler
     }
 
     //Adds grade to student for specified subject/graded item
-    public static void addGrade(String Subject, String Student, String GradedItem, int grade, int max)
+    public static boolean addGrade(String Subject, String Student, String GradedItem, int grade, int max)
     {
         try
         {
             String sqlQuery = "INSERT INTO `tbl_grades` (`Subject`, `Student`, `Graded_Item`, `Grade_Achieved`, `Grade_Max`) VALUES ('"
             + Subject + "', '" + Student + "', '" + GradedItem + "', '" + grade + "', '" + max + "');";
             startConnection().execute(sqlQuery);
+            return true;
         }
         catch (Exception e)
         {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -348,6 +351,30 @@ public class MySQL_Handler
         {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public static String checkLoggedIn(int token)
+    {
+        String username = null;
+
+        try
+        {
+            String sqlQuery = "SELECT Username FROM `tbl_users` WHERE Token = " + token + "";
+            ResultSet rs = startConnection().executeQuery(sqlQuery);
+
+            while (rs.next())
+            {
+                username = rs.getString(1);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            return username;
         }
     }
 
@@ -593,6 +620,11 @@ public class MySQL_Handler
             startConnection().execute(NextQuery);
             NextQuery = "INSERT INTO `tbl_grades` (`Subject`, `Student`, `Graded_Item`, `Grade_Achieved`, `Grade_Max`) VALUES ('CSCI342', 'Ahmed', 'Virtual Exam', '27', '30');";
             startConnection().execute(NextQuery);
+
+            //TEMPORARY - Hardcoded reset of tokens for only 3 users.
+            setToken("Justin", 0);
+            setToken("Jawad", 0);
+            setToken("Ahmed", 0);
 
 
             return true;
