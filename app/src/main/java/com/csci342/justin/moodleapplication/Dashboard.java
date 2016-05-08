@@ -48,7 +48,7 @@ public class Dashboard extends Activity {
     Handler myHandler;
     public  int login_token = 0;
     public static final int PORT = 33333;
-    public static final String addr = "172.18.18.155";
+    public static final String addr = "172.18.17.120";
 
 
     @Override

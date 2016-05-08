@@ -108,6 +108,7 @@ public class Server extends Thread{
 
     public static void main(String[] args) {
 
+
         token_list = new int[50];
 
         while (true) {
