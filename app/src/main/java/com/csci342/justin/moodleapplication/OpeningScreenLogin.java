@@ -34,7 +34,7 @@ public class OpeningScreenLogin extends AppCompatActivity{
     Protocol User;
 
     public static final int PORT = 33333;
-    public static final String addr = "172.18.17.120";
+    public static final String addr = "172.18.26.150";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class OpeningScreenLogin extends AppCompatActivity{
 
         //----------------Here is the place where we initialize the user protocol and pass it to the rest.
         User = new Protocol();
-        User.setAuthority("Teacher");
+        //User.setAuthority("Teacher");
         User.setPass("12345");
         User.setLogin("abosami");
         //----------------------------------HARDCODED FOR NOW
@@ -71,6 +71,8 @@ public class OpeningScreenLogin extends AppCompatActivity{
                 {
                     Log.i("GOOD", "SETTING LOGIN TOKEN");
                     login_token = msg.arg2;
+                    User.setAuthority((String)msg.obj);
+                    Toaster("Your Authority is : "+ User.authority);
                     successFunction();
                 }
                 else
@@ -83,6 +85,10 @@ public class OpeningScreenLogin extends AppCompatActivity{
             }
         };
 
+    }
+    public void Toaster(String input)
+    {
+        Toast.makeText(this,input,Toast.LENGTH_SHORT).show();
     }
 
     public void failureFunction()
@@ -99,7 +105,7 @@ public class OpeningScreenLogin extends AppCompatActivity{
     private class logMeIn extends Thread
     {
         Protocol the_user;
-
+        String auth;
         public logMeIn(Protocol User)
         {
             the_user = User;
@@ -122,6 +128,7 @@ public class OpeningScreenLogin extends AppCompatActivity{
 
                 Info temp = (Info) input.readObject();
 
+                auth = ((String)input.readObject());
                 Log.i("RECEIVED", "Server Reply Received");
 
                 if(temp.tag == 1) {
@@ -129,6 +136,7 @@ public class OpeningScreenLogin extends AppCompatActivity{
                     msg.what = 1;
                     msg.arg1 = 1;
                     msg.arg2 = temp.token;
+                    msg.obj = (Object) auth;
                     myHandler.sendMessage(msg);
                     Log.i("SUCCESS", "Message sent confirming login");
                 }
@@ -177,8 +185,6 @@ public class OpeningScreenLogin extends AppCompatActivity{
     public void openDashboard()
     {
         Intent i = new Intent(this, Dashboard.class);
-        String x = ((Spinner)findViewById(R.id.OSL_tempspin_spinner)).getSelectedItem().toString();
-        User.setAuthority(x);
         i.putExtra("User",User);
         i.putExtra("Token",login_token);
         startActivity(i);

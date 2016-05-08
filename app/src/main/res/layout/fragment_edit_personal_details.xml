@@ -1,13 +1,117 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="layout.EditPersonalDetails">
+    tools:context="layout.EditPersonalDetails"
+    android:id="@+id/EPD_relative_layout"
+    android:onClick="inputpersonalinformation">
 
-    <ListView
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="FName:"
+        android:id="@+id/EPD_Fname_textview"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="30dp" />
+
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="Adress:"
+        android:id="@+id/EPD_adress_textview"
+        android:textSize="30dp"
+        android:layout_marginTop="81dp"
+        android:layout_below="@+id/EPD_Fname_textview"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/EPD_list_listview"
-        android:background="#8db3cf" />
+        android:text="Phone:"
+        android:id="@+id/EPD_phone_textview"
+        android:textSize="30dp"
+        android:layout_below="@+id/EPD_adress_textview"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="54dp" />
 
-</FrameLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email:"
+        android:id="@+id/EPD_mail_textview"
+        android:textSize="30dp"
+        android:layout_alignTop="@+id/EPD_getmail_textview"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:text="New Text"
+        android:id="@+id/EPD_getFname_textview"
+        android:layout_above="@+id/EPD_adress_textview"
+        android:layout_toRightOf="@+id/EPD_Fname_textview"
+        android:layout_toEndOf="@+id/EPD_Fname_textview"
+        android:onClick="inputpersonalinformation" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:text="New Text"
+        android:id="@+id/EPD_getaddress_textview"
+        android:onClick="inputpersonalinformation"
+        android:layout_alignBaseline="@+id/EPD_adress_textview"
+        android:layout_alignBottom="@+id/EPD_adress_textview"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/EPD_adress_textview"
+        android:layout_toEndOf="@+id/EPD_adress_textview" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:text="New Text"
+        android:id="@+id/EPD_getphone_textview"
+        android:layout_alignTop="@+id/EPD_phone_textview"
+        android:layout_toRightOf="@+id/EPD_adress_textview"
+        android:layout_toEndOf="@+id/EPD_adress_textview"
+        android:onClick="inputpersonalinformation" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:text="New Text"
+        android:id="@+id/EPD_getmail_textview"
+        android:layout_below="@+id/EPD_phone_textview"
+        android:layout_alignLeft="@+id/EPD_getphone_textview"
+        android:layout_alignStart="@+id/EPD_getphone_textview"
+        android:layout_marginTop="47dp"
+        android:onClick="inputpersonalinformation" />
+
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="LName:"
+        android:id="@+id/EPD_Lname_textview"
+        android:textSize="30dp"
+        android:layout_below="@+id/EPD_Fname_textview"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:text="New Text"
+        android:id="@+id/EPD_getLname_textview"
+        android:onClick="inputpersonalinformation"
+        android:layout_alignTop="@+id/EPD_Lname_textview"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/EPD_Lname_textview"
+        android:layout_toEndOf="@+id/EPD_Lname_textview" />
+
+</RelativeLayout>

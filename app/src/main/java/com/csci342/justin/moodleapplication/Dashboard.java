@@ -1,6 +1,7 @@
 package com.csci342.justin.moodleapplication;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -48,7 +49,8 @@ public class Dashboard extends Activity {
     Handler myHandler;
     public  int login_token = 0;
     public static final int PORT = 33333;
-    public static final String addr = "172.18.17.120";
+    public static final String addr = "172.18.26.150";
+    public  String empty;
 
 
     @Override
@@ -115,6 +117,13 @@ public class Dashboard extends Activity {
                     }
                 Populate(Announcements);
                 }
+                else if(msg.what==4)
+                {
+                    Toaster("opened dashboard");
+                    String[] information = new String[5];
+                    information = (String[]) msg.obj;
+                    populate_information(information);
+                }
                 else {
                     Log.i("Bad", "From DashBoard");
                     Toaster("Failed to Connect to server");
@@ -123,7 +132,76 @@ public class Dashboard extends Activity {
             }
         };
 
+        getpersonalinfo populateinformation = new getpersonalinfo(login_token);
+        populateinformation.start();
     }
+    public void populate_information(String[] info)
+    {//0fname 1lname 2email 3phone 4 addr
+        TextView firstname = (TextView) findViewById(R.id.EPD_getFname_textview);
+        TextView lastname = (TextView) findViewById(R.id.EPD_getLname_textview);
+        TextView email = (TextView) findViewById(R.id.EPD_getmail_textview);
+        TextView phone = (TextView) findViewById(R.id.EPD_getphone_textview);
+        TextView address = (TextView) findViewById(R.id.EPD_getaddress_textview);
+        firstname.setText(info[0]);
+        lastname.setText(info[1]);
+        email.setText(info[2]);
+        phone.setText(info[3]);
+        address.setText(info[4]);
+
+
+    }
+    private class getpersonalinfo extends Thread
+    {
+        int token;
+        String[] fields = new String [5];
+        public getpersonalinfo(int intoken)
+        {
+            token = intoken;
+        }
+        @Override
+        public void run()
+        {
+            try
+            {
+                Socket with_server = new Socket(InetAddress.getByName(addr),PORT);
+                ObjectInputStream input = new ObjectInputStream(with_server.getInputStream());
+                ObjectOutputStream output = new ObjectOutputStream(with_server.getOutputStream());
+
+                Info request_size = new Info();
+                request_size.setTag(16);
+                request_size.setToken(token);
+                output.writeObject(request_size);
+                /*
+                Info confirm_server = new Info();
+                confirm_server = (Info) input.readObject();
+              */
+
+                output.writeObject(User.getLogin());
+
+                fields = (String[])input.readObject();
+
+                Message msg = myHandler.obtainMessage();
+                msg.what = 4;
+                msg.obj = (Object) fields;
+                myHandler.sendMessage(msg);
+
+
+            }
+            catch(UnknownHostException e)
+            {
+                e.printStackTrace();
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        }
+
     public void Populate(ArrayList<String> Announcements)
     {
         ListView lv = (ListView) findViewById(R.id.SA_SendAnn_listview);
@@ -271,10 +349,12 @@ public class Dashboard extends Activity {
         String Announcement;
         int token_from_login;
         int ack=0;
-        public send_announcement_server(String In_Announcement, int token)
+        String subname;
+        public send_announcement_server(String In_Announcement, int token,String insubname)
         {
             Announcement = In_Announcement;
             token_from_login=token;
+            subname=insubname;
         }
 
         @Override
@@ -301,6 +381,7 @@ public class Dashboard extends Activity {
                 {
                     Message msg = myHandler.obtainMessage();
                     msg.what=1;
+                    output.writeObject(subname);
                     output.writeObject(Announcement);
                     ack = (int)input.readObject();
                     if(ack != 0)
@@ -343,6 +424,206 @@ public class Dashboard extends Activity {
         FragmentTransaction ft = fm.beginTransaction();
         tabs.removeAllViews();
         ft.replace(R.id.D_tabview_framelayout, frag).commit();
+        getpersonalinfo getinfo = new getpersonalinfo(login_token);
+        getinfo.start();
+    }
+    public void inputpersonalinformation(View v)
+    {
+        TextView textView = (TextView) v;
+        String temp = textView.getText().toString();
+        if(v.getId()==R.id.EPD_getFname_textview)
+        {
+         empty = new String("Fname");
+        }
+        else if(v.getId()==R.id.EPD_getLname_textview)
+        {
+            empty = new String("Lname");
+        }
+        else if(v.getId()==R.id.EPD_getaddress_textview)
+        {
+            empty=new String("Address");
+        }
+        else if(v.getId()==R.id.EPD_getphone_textview)
+        {
+            empty = new String("Phone");
+        }
+        else if(v.getId() == R.id.EPD_getmail_textview)
+        {
+            empty = new String("Email");
+        }
+        Toaster("RUNNING INPUTPERSONALINFORMAION");
+        final Dialog dialog = new Dialog(Dashboard.this);
+        dialog.setContentView(R.layout.editannouncementdialog);
+        dialog.setTitle("Enter info");
+        Button button = (Button) dialog.findViewById(R.id.EAD_button);
+        EditText edit = (EditText) dialog.findViewById(R.id.EAD_edittext);
+        edit.setText(empty);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String inputtext;
+                EditText edit = (EditText) dialog.findViewById(R.id.EAD_edittext);
+                if ((!(edit.getText().toString()).equals(""))) {
+                    inputtext = edit.getText().toString();
+                    dialog.dismiss();
+                    createClass(inputtext);
+                }
+
+            }
+        });
+
+
+        dialog.show();
+    }
+
+    private class updatepersonalinfo extends Thread
+    {
+        int i =0;
+        String[] fields= new String[7];
+        public updatepersonalinfo(String[] strings)
+        {
+            for( i =0;i<7;i++)
+            {
+                fields[i]=strings[i];
+            }
+        }
+        @Override
+        public void run()
+        {
+            try {
+                Socket with_server = new Socket(InetAddress.getByName(addr), PORT);
+                ObjectInputStream input = new ObjectInputStream(with_server.getInputStream());
+                ObjectOutputStream output = new ObjectOutputStream(with_server.getOutputStream());
+
+                Info send_to_server = new Info();
+                send_to_server.setTag(15);
+                send_to_server.setToken(login_token);
+                output.writeObject(send_to_server);
+
+                for( i = 0 ; i < 7 ; i++)
+                {
+                    output.writeObject(fields[i]);
+                }
+
+
+            }catch(UnknownHostException e)
+            {
+                e.printStackTrace();
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void createClass(String inputtext) {
+        TextView temp ;
+        if(empty.equals("Fname"))
+        {String [] fields = new String [7];
+            fields[0]=User.getLogin();
+            fields[1]=inputtext;
+            temp = (TextView) findViewById(R.id.EPD_getLname_textview) ;
+            fields[2]= temp.getText().toString();
+            fields[3]=User.getAuthority();
+            temp = (TextView) findViewById(R.id.EPD_getmail_textview) ;
+            fields[4] = temp.getText().toString();
+            temp = (TextView) findViewById(R.id.EPD_getphone_textview);
+            fields[5] = temp.getText().toString();
+            temp = (TextView) findViewById(R.id.EPD_getaddress_textview);
+            fields[6]=temp.getText().toString();
+
+            updatepersonalinfo up = new updatepersonalinfo(fields);
+            up.start();
+
+            temp = (TextView) findViewById(R.id.EPD_getFname_textview) ;
+            temp.setText(inputtext);
+        }
+        else if(empty.equals("Lname"))
+        {String [] fields = new String [7];
+            fields[0]=User.getLogin();
+            temp = (TextView) findViewById(R.id.EPD_getFname_textview) ;
+            fields[1]=temp.getText().toString();
+            fields[2]= inputtext;
+            fields[3]=User.getAuthority();
+            temp = (TextView) findViewById(R.id.EPD_getmail_textview) ;
+            fields[4] = temp.getText().toString();
+            temp = (TextView) findViewById(R.id.EPD_getphone_textview);
+            fields[5] = temp.getText().toString();
+            temp = (TextView) findViewById(R.id.EPD_getaddress_textview);
+            fields[6]=temp.getText().toString();
+
+            updatepersonalinfo up = new updatepersonalinfo(fields);
+            up.start();
+
+            temp = (TextView) findViewById(R.id.EPD_getLname_textview) ;
+            temp.setText(inputtext);
+        }
+        else if(empty.equals("Address"))
+        {
+            String [] fields = new String [7];
+            fields[0]=User.getLogin();
+            temp = (TextView) findViewById(R.id.EPD_getFname_textview);
+            fields[1]=temp.getText().toString();
+            temp = (TextView) findViewById(R.id.EPD_getLname_textview) ;
+            fields[2]= temp.getText().toString();
+            fields[3]=User.getAuthority();
+            temp = (TextView) findViewById(R.id.EPD_getmail_textview) ;
+            fields[4] = temp.getText().toString();
+            temp = (TextView) findViewById(R.id.EPD_getphone_textview);
+            fields[5] = temp.getText().toString();
+
+            fields[6]=inputtext;
+
+            updatepersonalinfo up = new updatepersonalinfo(fields);
+            up.start();
+
+            temp = (TextView) findViewById(R.id.EPD_getaddress_textview) ;
+            temp.setText(fields[6]);
+        }
+        else if(empty.equals("Phone"))
+        {
+            String [] fields = new String [7];
+            fields[0]=User.getLogin();
+            temp = (TextView) findViewById(R.id.EPD_getFname_textview);
+            fields[1]=temp.getText().toString();
+            temp = (TextView) findViewById(R.id.EPD_getLname_textview) ;
+            fields[2]= temp.getText().toString();
+            fields[3]=User.getAuthority();
+            temp = (TextView) findViewById(R.id.EPD_getmail_textview) ;
+            fields[4] = temp.getText().toString();
+            fields[5] = inputtext;
+            temp = (TextView) findViewById(R.id.EPD_getaddress_textview);
+            fields[6]=temp.getText().toString();
+
+            updatepersonalinfo up = new updatepersonalinfo(fields);
+            up.start();
+
+            temp = (TextView) findViewById(R.id.EPD_getphone_textview) ;
+            temp.setText(inputtext);
+        }
+        else if(empty.equals("Email"))
+        {
+            String [] fields = new String [7];
+            fields[0]=User.getLogin();
+            temp = (TextView) findViewById(R.id.EPD_getFname_textview) ;
+            fields[1]=temp.getText().toString();
+            temp = (TextView) findViewById(R.id.EPD_getLname_textview) ;
+            fields[2]= temp.getText().toString();
+            fields[3]=User.getAuthority();
+
+            fields[4] = inputtext;
+            temp = (TextView) findViewById(R.id.EPD_getphone_textview);
+            fields[5] = temp.getText().toString();
+            temp = (TextView) findViewById(R.id.EPD_getaddress_textview);
+            fields[6]=temp.getText().toString();
+
+            updatepersonalinfo up = new updatepersonalinfo(fields);
+            up.start();
+
+            temp = (TextView) findViewById(R.id.EPD_getmail_textview) ;
+            temp.setText(inputtext);
+        }
+
     }
 
     public void switchToSendAnnouncement(View v) {
@@ -368,6 +649,7 @@ public class Dashboard extends Activity {
         startActivity(i);
     }
 
+
     public void toInsertAnnouncement(View v) {
         frag = new InsertAnnouncement();
         FragmentTransaction ft = fm.beginTransaction();
@@ -386,8 +668,11 @@ public class Dashboard extends Activity {
     public void confirmsendannouncement(View v) {
         EditText InsertAnn = (EditText) findViewById(R.id.IA_insAnn_edittext) ;
         String Announcement_Inserted;
+        String subname;
+        EditText subcode = (EditText) findViewById(R.id.IA_subjectcode_edittext);
+        subname = subcode.getText().toString();
         Announcement_Inserted = InsertAnn.getText().toString();
-        send_announcement_server confirmsend = new send_announcement_server(Announcement_Inserted, login_token);
+        send_announcement_server confirmsend = new send_announcement_server(Announcement_Inserted, login_token,subname);
         confirmsend.start();
         Log.i("String is : ", Announcement_Inserted);
 

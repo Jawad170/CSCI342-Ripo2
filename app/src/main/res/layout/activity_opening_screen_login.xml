@@ -58,7 +58,7 @@
         android:textSize="35dp"
         android:onClick="login"
         android:background="#71a8d0"
-        />
+        android:layout_alignParentEnd="false" />
 
     <LinearLayout
         android:orientation="vertical"

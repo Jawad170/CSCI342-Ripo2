@@ -26,6 +26,20 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enroll Tutorial"
+            android:id="@+id/SV_tutorial_button"
+            android:onClick="enrolltutorial" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Drop Subject"
+            android:id="@+id/SV_Drop_button"
+            android:onClick="dropsub" />
     </LinearLayout>
 
     <LinearLayout
@@ -61,7 +75,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Upload \nAssignment"
+            android:text="View \n Notices"
             android:id="@+id/SV_uploadassi_button"
             android:layout_weight="1"
             android:textSize="14dp"
@@ -86,13 +100,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignTop="@+id/SV_linearlayout"
-        android:id="@+id/SV_framelayout"></FrameLayout>
+        android:id="@+id/SV_framelayout">
 
-    <ListView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/SV_Marks_listview"
-        android:layout_weight="0.83"
-        android:layout_alignTop="@+id/SV_linearlayout" />
+    </FrameLayout>
 
 </RelativeLayout>

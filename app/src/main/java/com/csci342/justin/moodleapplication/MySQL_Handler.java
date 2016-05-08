@@ -90,9 +90,9 @@ public class MySQL_Handler
         //.....................................................................
 
         ///TESTING GET ALL SUBJECTS
-            //String Subjects[] = getALLSujects();
-            //for (int i = 0; i < Subjects.length; i++ )
-            //{ System.out.println(Subjects[i]); }
+        //String Subjects[] = getALLSujects();
+        //for (int i = 0; i < Subjects.length; i++ )
+        //{ System.out.println(Subjects[i]); }
         //.....................................................................
 
 

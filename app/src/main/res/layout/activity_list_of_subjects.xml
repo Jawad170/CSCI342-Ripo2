@@ -29,24 +29,20 @@
             android:layout_weight="0.5"
             android:gravity="center_vertical" />
 
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/LOS_yearselection_spinner"
-            android:layout_weight="0.5" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enroll Subject"
+            android:id="@+id/LOS_enrollsub_button"
+            android:nestedScrollingEnabled="false"
+            android:onClick="enrollsubject" />
+
     </LinearLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/LOS_scrollview"
-        android:layout_below="@+id/LOS_titlelayout_linearlayout">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/LOS_linearlayout"></LinearLayout>
-    </ScrollView>
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/LOS_list_listview"
+        android:layout_below="@+id/LOS_titlelayout_linearlayout" />
 
 </RelativeLayout>

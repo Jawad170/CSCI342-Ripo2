@@ -72,7 +72,7 @@ public class EditPersonalDetails extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_edit_personal_details, container, false);
 
-        final ListView listview = (ListView) rootView.findViewById(R.id.EPD_list_listview);
+        /*final ListView listview = (ListView) rootView.findViewById(R.id.EPD_list_listview);
 
         String[] values = new String[] {"Dummy Data 1", "Dummy Data 2", "Dummy Data 3", "Dummy Data 4", "Dummy Data 5"};
 
@@ -83,7 +83,7 @@ public class EditPersonalDetails extends Fragment {
 
         final ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, list);
         listview.setAdapter(adapter);
-
+*/
         return rootView;
     }
 
