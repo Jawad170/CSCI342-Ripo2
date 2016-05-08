@@ -128,6 +128,40 @@ public class MySQL_Handler
     }
 
 
+    public static String[] getALLAnnouncements()
+    {
+        ArrayList<String> AList = new ArrayList<String>();
+        String[] announcements = null;
+
+        try
+        {
+            String sqlQuery = "SELECT * FROM `tbl_announcements`";
+            ResultSet rs = startConnection().executeQuery(sqlQuery);
+
+            while (rs.next())
+            {
+                AList.add("[" + rs.getDate(3).toString() + "] " + rs.getString(2));
+            }
+
+            announcements = new String[AList.size()];
+            for ( int i = 0; i < announcements.length; i++)
+            {
+                announcements[i] = AList.get(i);
+            }
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
+            return announcements;
+        }
+
+    }
 
     //Returns in this format: [DATE] ANNOUNCEMENT
     public static String[] getAnnouncements(String Subject)
