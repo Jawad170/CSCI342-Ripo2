@@ -101,7 +101,6 @@ public class MySQL_Handler
         //System.out.println("\n Is Justin Enrolled in CSCI323? " + IsEnrolledInSubject("Justin", "CSCI323"));
         //System.out.println("\n Is Justin Enrolled in it's Tutorial? " + IsEnrolledInTutorial("Justin", "CSCI323"));
 
-
     }
 
     //Connects to database and returns a Statement object ready to execute sql.
