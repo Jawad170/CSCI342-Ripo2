@@ -210,8 +210,8 @@ public class Server extends Thread{
                             else if(hello.tag == 4)//VIEW STUDENT NAMES.
                             {
                                 studentnames[0]="Ahmed";
-                                studentnames[1]="jwad";
-                                studentnames[2]="jstn";
+                                studentnames[1]="Jawad";
+                                studentnames[2]="Justin";
                                  int namesize = 3;
                                 output.writeObject(namesize);
                                 output.writeObject(studentnames);
