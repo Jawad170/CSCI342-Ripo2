@@ -1,15 +1,19 @@
 package com.csci342.justin.moodleapplication;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.EOFException;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Random;
 
 /**
@@ -104,6 +108,7 @@ public class Server extends Thread{
 
     public static void main(String[] args) {
 
+
         token_list = new int[50];
 
         while (true) {
@@ -133,11 +138,21 @@ public class Server extends Thread{
                         if(valid)
                         {
                             int temp = generateToken();
-                            hello.setToken(temp);
-                            hello.setTag(1);
-                            token_list[array_tracker] = temp;
-                            array_tracker++;
-                            output.writeObject(hello);
+                            boolean success = MySQL_Handler.setToken("Justin",temp);
+                            if(success) {
+
+                                hello.setToken(temp);
+                                hello.setTag(1);
+                                token_list[array_tracker] = temp;
+                                array_tracker++;
+                                output.writeObject(hello);
+                            }
+                            else
+                            {
+                                hello.setToken(0);
+                                hello.setTag(0);
+                                output.writeObject(hello);
+                            }
                         }
                         else
                         {
@@ -232,29 +247,39 @@ public class Server extends Thread{
                                 output.writeObject(temp);
                                 try
                                 {
+                                    int i =0;
                                     Socket file_client = fileserverSocket.accept();
                                     System.out.println("New File transfer connection established");
-                                    int filesize = (int) input.readObject();
+                                   // int filesize = (int) input.readObject();
                                     String filename = (String) input.readObject();
                                     byte[] received_file = new byte[65536];
                                     InputStream is = file_client.getInputStream();
                                     FileOutputStream fos = new FileOutputStream(filename);
                                     BufferedOutputStream bos = new BufferedOutputStream(fos);
                                     System.out.println("Reading File now");
+                                    File to_make = new File(filename);
+                                    FileOutputStream converter = new FileOutputStream(to_make);
+                                    converter.getFD().sync();
                                     int bytesRead;
-                                    byte[] bigarray = new byte[1000000];
+                                    byte[] bigarray = new byte[65536];
                                     int position = 0;
 
                                     do {
                                         bytesRead = is.read(received_file, 0, received_file.length);
-
+                                        System.out.println("test bytesRead = " + bytesRead);
                                         int counter = 0;
-                                        for(int i=position;i<position+bytesRead;i++)
+                                        for(i=0;i<bytesRead;i++)
                                         {
                                             bigarray[i] = received_file[counter];
                                             counter++;
                                         }
+                                        for(i=0;i<position;i++) {
+                                            converter.write(bigarray[i]);
+                                        }
                                         position += bytesRead;
+
+                                        converter.getFD().sync();
+                                        converter.flush();
                                         System.out.println("bytesRead = " + bytesRead);
                                         System.out.println("Position = " + position);
 
@@ -265,15 +290,9 @@ public class Server extends Thread{
                                     is.close();
                                     fos.close();
                                     bos.close();
-                                    File to_make = new File(filename);
-                                    FileOutputStream converter = new FileOutputStream(to_make);
 
-                                    converter.getFD().sync();
-                                    for(int i=0;i<position;i++) {
-                                        converter.write(bigarray[i]);
-                                    }
-                                    converter.getFD().sync();
-                                    converter.flush();
+
+
 
                                     System.out.println("Received File: " + filename);
                                     converter.close();
@@ -292,9 +311,39 @@ public class Server extends Thread{
 
 
                             }
-                            else if(hello.tag == 7)
+                            else if(hello.tag == 7)//(DOWNLOAD FILES)
                             {
-                                //logic for handling request 7
+                                ServerSocket fileserverSocket = new ServerSocket(33334);
+                                System.out.println("File Transfer Server Setup, waiting...");
+                                File file_to_send = new File("/sdcard/test.txt");//SET IT
+                                Info temp = new Info();
+                                temp.setTag(1);
+                                output.writeObject(temp);
+                                try
+                                {
+                                    Socket file_client = fileserverSocket.accept();
+                                    System.out.println("New File transfer connection established");
+                                    byte[] array_to_send  = new byte [(int)file_to_send.length()];
+                                    output.writeObject(array_to_send.length);
+                                    output.writeObject(file_to_send.getName());
+                                    FileInputStream fis = new FileInputStream(file_to_send);
+                                    BufferedInputStream bis = new BufferedInputStream(fis);
+                                    bis.read(array_to_send,0,array_to_send.length);
+                                    OutputStream os = file_client.getOutputStream();
+                                    os.write(array_to_send,0,array_to_send.length);
+                                    os.close();
+                                    file_client.close();
+
+                                }catch(UnknownHostException e)
+                                {
+                                    e.printStackTrace();
+                                }
+                                catch(IOException e)
+                                {
+                                    e.printStackTrace();
+                                }
+
+
                             }
                             else if(hello.tag == 8)
                             {
