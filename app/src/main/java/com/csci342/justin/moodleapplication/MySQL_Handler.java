@@ -651,6 +651,40 @@ public class MySQL_Handler
         }
     }
 
+    public static String[] getStudentsEnrolled(String Subject)
+    {
+        ArrayList<String> AList = new ArrayList<String>();
+        String[] students = null;
+
+        try
+        {
+            String sqlQuery = "SELECT Student FROM `tbl_enrollments` WHERE Enrolled = \"" + Subject + "\" AND Type = 1";
+            ResultSet rs = startConnection().executeQuery(sqlQuery);
+
+            while (rs.next())
+            {
+                AList.add(rs.getString(1));
+            }
+
+            students = new String[AList.size()];
+            for ( int i = 0; i < students.length; i++)
+            {
+                students[i] = AList.get(i);
+            }
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
+            return students;
+        }
+    }
+
     public static boolean dropSubject(String Student, String Subject)
     {
         try
