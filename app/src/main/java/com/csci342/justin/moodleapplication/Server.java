@@ -137,11 +137,21 @@ public class Server extends Thread{
                         if(valid)
                         {
                             int temp = generateToken();
-                            hello.setToken(temp);
-                            hello.setTag(1);
-                            token_list[array_tracker] = temp;
-                            array_tracker++;
-                            output.writeObject(hello);
+                            boolean success = MySQL_Handler.setToken("Justin",temp);
+                            if(success) {
+
+                                hello.setToken(temp);
+                                hello.setTag(1);
+                                token_list[array_tracker] = temp;
+                                array_tracker++;
+                                output.writeObject(hello);
+                            }
+                            else
+                            {
+                                hello.setToken(0);
+                                hello.setTag(0);
+                                output.writeObject(hello);
+                            }
                         }
                         else
                         {
