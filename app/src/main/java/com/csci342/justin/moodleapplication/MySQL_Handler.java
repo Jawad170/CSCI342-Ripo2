@@ -717,6 +717,8 @@ public class MySQL_Handler
             resetStatement.execute(NextQuery);
             NextQuery = "INSERT INTO `tbl_announcements` (`Subject`, `Announcement`, `Date`) VALUES ('CSCI015', 'Exam will be easy, calm down.', '2016-05-01');";
             resetStatement.execute(NextQuery);
+            NextQuery = "INSERT INTO `tbl_announcements` (`Subject`, `Announcement`, `Date`) VALUES ('CSCI342', 'Final Increment Presentation on Monday.', '2016-05-01');";
+            resetStatement.execute(NextQuery);
 
             //RESETTING ENROLLMENTS TABLE
             NextQuery = "DELETE FROM tbl_enrollments;";
