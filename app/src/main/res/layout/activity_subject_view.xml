@@ -44,8 +44,8 @@
             android:layout_weight="1"
             android:textSize="14dp"
             android:background="#8db3cf"
-            android:onClick="switchToViewResources"
-            />
+            android:onClick="switchtoViewResources"
+            android:nestedScrollingEnabled="false" />
 
         <Button
             android:layout_width="match_parent"

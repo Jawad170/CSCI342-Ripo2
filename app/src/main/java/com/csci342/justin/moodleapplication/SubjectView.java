@@ -21,9 +21,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -53,7 +57,7 @@ public class SubjectView extends Activity
     Handler myHandler;
     public static final int PORT = 33333;
     public static final int PORT2 = 33334;
-    public static final String addr = "172.18.29.57";
+    public static final String addr = "172.18.18.155";
    public int login_token=0;
 
     @Override
@@ -149,8 +153,11 @@ public class SubjectView extends Activity
                 }
                 else if(msg.what==7)
                 {
-                    Toaster("File Uploaded Successfully");
-
+                    Toaster("File Uploaded Successfully!");
+                }
+                else if(msg.what==8)
+                {
+                    Toaster("Downloaded File Successfully!");
                 }
                 else {
                     Log.i("Bad", "From SubViewer");
@@ -204,6 +211,101 @@ public class SubjectView extends Activity
         );
     }
 
+    private class download_resources extends Thread
+    {
+        int token;
+        int bytesRead;
+        int position;
+        int counter;
+        int i;
+        int read_so_far;
+        byte[] not_so_big_Array = new byte[65536];
+        public download_resources(int in_token)
+        {
+            token = in_token;
+            position = 0;
+            counter = 0;
+            i=0;
+            read_so_far=0;
+        }
+        //@Override
+         public void run()
+        {
+           try {
+                Socket with_server = new Socket(InetAddress.getByName(addr), PORT);
+                ObjectInputStream input = new ObjectInputStream(with_server.getInputStream());
+                ObjectOutputStream output = new ObjectOutputStream(with_server.getOutputStream());
+
+                Log.i("File Download","Requesting download file");
+                Info request = new Info();
+                request.setTag(7);
+                request.setToken(token);
+                output.writeObject(request);
+
+                Info response = (Info)input.readObject();
+                if(response.tag == 1)
+                {
+                    Socket recieve_file = new Socket(InetAddress.getByName(addr),PORT2);
+                   // int filesize = (int) input.readObject();
+                    String filename = (String) input.readObject();
+                    byte[] recieve_byte = new byte[65536];
+                    InputStream is = recieve_file.getInputStream();
+                    FileOutputStream fos = new FileOutputStream(filename);
+                    BufferedOutputStream bos = new BufferedOutputStream(fos);
+                    File to_make = new File(filename);//WHERE?!
+                    FileOutputStream converter = new FileOutputStream(to_make);
+                    converter.getFD().sync();
+                    System.out.println("Reading File now");
+
+                    do {
+                        bytesRead = is.read(recieve_byte, 0, recieve_byte.length);
+                        for(i=0;i<bytesRead;i++)
+                        {
+                            not_so_big_Array[i] = recieve_byte[counter];
+                            counter++;
+                        }
+                        for(i=0;i<position;i++) {
+                            converter.write(not_so_big_Array[i]);
+                        }
+                        position += bytesRead;
+                        converter.getFD().sync();
+                        converter.flush();
+                        Log.i("bytesRead = " ,""+ bytesRead);
+                        Log.i("Position = " , ""+position);
+
+
+                    }while(bytesRead == 65536);
+                    Log.i("Received byte_array: ",  bytesRead + " bytes read.");
+                    is.close();
+                    fos.close();
+                    bos.close();
+                    System.out.println("Received File: " + filename);
+                    converter.close();
+                    with_server.close();
+
+                }
+               else
+                {
+                    Log.i("SERVER", "Rejected Download request");
+                    return;
+                }
+               Message msg= myHandler.obtainMessage();
+               msg.what=8;
+               myHandler.sendMessage(msg);
+
+            }catch(EOFException e)
+           {
+               e.printStackTrace();
+           }catch(IOException e)
+           {
+               e.printStackTrace();
+           }
+           catch(ClassNotFoundException e)
+           {
+               e.printStackTrace();
+           }
+        }
+    }
     private class upload_resources extends Thread
     {
         int token;
@@ -232,7 +334,7 @@ public class SubjectView extends Activity
                 if(response.tag == 1)
                 {
                     Socket send_file = new Socket(InetAddress.getByName(addr),PORT2);
-                    File file_to_send = new File("/mnt/extSdCard/MOODLE/Transfer Test File.pdf");
+                    File file_to_send = new File("/sdcard/test.txt");
                     byte[] array_to_send  = new byte [(int)file_to_send.length()];
                     output.writeObject(array_to_send.length);
                     output.writeObject(file_to_send.getName());
@@ -502,7 +604,17 @@ public class SubjectView extends Activity
         getmarks.start();
         Log.i("VIEW","IT GOT HERE");
     }
-
+    public void switchtoViewResources(View v)
+    {
+       /* frag = new ViewResources();
+        FragmentTransaction ft = fm.beginTransaction();
+        tabs.removeAllViews();
+        ft.replace(R.id.VR_MainLayout_relativelayout, frag).commit();
+*/
+        download_resources getresources = new download_resources(login_token);
+        getresources.start();
+        Log.i("VIEW","Resources");
+    }
     public void switchToUploadAssignment(View v)
     {
         frag = new UploadAssignment();
