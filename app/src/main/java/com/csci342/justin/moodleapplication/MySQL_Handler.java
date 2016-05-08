@@ -101,6 +101,7 @@ public class MySQL_Handler
         //System.out.println("\n Is Justin Enrolled in CSCI323? " + IsEnrolledInSubject("Justin", "CSCI323"));
         //System.out.println("\n Is Justin Enrolled in it's Tutorial? " + IsEnrolledInTutorial("Justin", "CSCI323"));
 
+
     }
 
     //Connects to database and returns a Statement object ready to execute sql.
@@ -469,7 +470,7 @@ public class MySQL_Handler
     }
 
     //Returns array of ALL subjects possible (CSCI222, ARTS015, etc...)
-    public static String[] getALLSujects()
+    public static String[] getALLSubjects()
     {
         ArrayList<String> AList = new ArrayList<String>();
         String[] subjects = null;
@@ -579,6 +580,40 @@ public class MySQL_Handler
         {
             try {if ( con != null ) con.close();}
             catch (Exception e) { }
+        }
+    }
+
+    public static String[] getEnrolledSubjects(String Student)
+    {
+        ArrayList<String> AList = new ArrayList<String>();
+        String[] subjects = null;
+
+        try
+        {
+            String sqlQuery = "SELECT Enrolled FROM `tbl_enrollments` WHERE Student = \"" + Student + "\" AND Type = 1";
+            ResultSet rs = startConnection().executeQuery(sqlQuery);
+
+            while (rs.next())
+            {
+                AList.add(rs.getString(1));
+            }
+
+            subjects = new String[AList.size()];
+            for ( int i = 0; i < subjects.length; i++)
+            {
+                subjects[i] = AList.get(i);
+            }
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try {if ( con != null ) con.close();}
+            catch (Exception e) { }
+            return subjects;
         }
     }
 
