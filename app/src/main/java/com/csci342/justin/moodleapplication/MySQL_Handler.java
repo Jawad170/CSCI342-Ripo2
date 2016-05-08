@@ -446,7 +446,7 @@ public class MySQL_Handler
     //Returns array of strings with single users personal info, display one per line.
     public static String[] getPersonalInfo(String Username)
     {
-        String[] PI = new String[4];
+        String[] PI = new String[5];
 
         try
         {
@@ -455,10 +455,11 @@ public class MySQL_Handler
 
             while (rs.next())
             {
-                PI[0] = "NAME : " + rs.getString(7) + ", " + rs.getString(8) + " [" + rs.getString(3) + "]";
-                PI[1] = "EMAIL: " + rs.getString(9);
-                PI[2] = "PHONE: " + rs.getString(6);
-                PI[3] = "ADDRS: " + rs.getString(5);
+                PI[0] = "FNAME: " + rs.getString(7);//+ ", " + rs.getString(8) + " [" + rs.getString(3) + "]";
+                PI[1] = "LNAME: " + rs.getString(8);
+                PI[2] = "EMAIL: " + rs.getString(9);
+                PI[3] = "PHONE: " + rs.getString(6);
+                PI[4] = "ADDRS: " + rs.getString(5);
             }
         }
         catch (Exception e)
