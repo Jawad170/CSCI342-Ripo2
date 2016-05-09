@@ -138,7 +138,8 @@ public class Server extends Thread{
                         Protocol info = (Protocol) input.readObject();
                         System.out.println("Client Pass Hash = " + info.getPass());
                         String login_name = info.getLogin();
-                        boolean valid = checkHash(login_name, info.getPass());
+                        String pass_check = MySQL_Handler.getPassHash(login_name);
+                        boolean valid = pass_check.equals(info.getPass());
                         if(valid)
                         {
                             int temp = generateToken();
